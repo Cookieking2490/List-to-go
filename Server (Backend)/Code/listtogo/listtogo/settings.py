@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-()e_y@q*z5^r1qn@ni1cpccqk_*gvbar54+@-dg(ertfo(fb_5
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL='accounts.CustomUser'
 
 # Application definition
 
@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'listtogo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':'list_to_go',
+        'USER':'Ahmed',
+        'PASSWORD':'112233',
+        'HOST':'localhost',
+        'PORT':'3306',
     }
 }
 
