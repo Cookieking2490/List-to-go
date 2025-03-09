@@ -1,0 +1,399 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.LoginBackground {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: #111111;
+  justify-content: center;
+  align-items: center;
+}
+
+.AppHook {
+  position: absolute;
+  display: flex;
+  background-color: #222222;
+  width: 40%;
+  height: 500px;
+  border-radius: 25px;
+  outline: 0.5px solid rgba(255, 255, 255, 0.489);
+  left: 5%;
+  top: 15%;
+  justify-content: center;
+  align-items: center;
+}
+
+.HookTitle {
+  position: absolute;
+  left: 5%;
+  top: 0;
+  font-size: 45px;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+}
+.HookSlogan {
+  position: absolute;
+  top: 18%;
+  left: 5%;
+  font-size: 28px;
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-weight: normal;
+  font-style: normal;
+}
+.HookDescription {
+  position: absolute;
+  width: 700px;
+  height: 275px;
+  font-size: 29px;
+  font-family: "Lato", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  background-color: transparent;
+  top: 30%;
+  color: white;
+}
+
+.SignUpQuestion {
+  position: absolute;
+  bottom: 5%;
+  left: 5%;
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 25px;
+}
+
+.HookSignUpBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 7.5%;
+  color: white;
+  background-color: #111111;
+  width: 120px;
+  height: 40px;
+  font-size: 20px;
+  font-family: "Lato", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  border-radius: 15px;
+  left: 45%;
+  outline: 1px solid white;
+}
+
+.ThreeBubbles {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgba(255, 0, 0, 0);
+  bottom: 7%;
+  width: 40%;
+  height: 200px;
+  left: 5%;
+}
+
+.Bubble1,
+.Bubble2,
+.Bubble3 {
+  position: relative;
+  display: flex;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+  bottom: -90px;
+  opacity: 0;
+  pointer-events: "none";
+}
+
+.Bubble1 span {
+  font-size: 85px;
+}
+
+.ExecuteIcon {
+  font-size: 85px;
+}
+
+.Bubble3 span {
+  font-size: 85px;
+}
+
+.PlanBubble,
+.ExecuteBubble,
+.AchieveBubble {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 22px;
+  font-weight: normal;
+  font-style: normal;
+}
+
+.BubbleLabels {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  gap: 195px;
+  bottom: -40px;
+  left: 13%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ExecuteBubble {
+  position: relative;
+  left: 5px;
+}
+
+.AchieveBubble {
+  position: relative;
+  right: 10px;
+}
+
+.LoginSection {
+  position: absolute;
+  display: flex;
+  background-color: #222222;
+  justify-content: center;
+  align-items: center;
+  width: 700px;
+  height: 800px;
+  left: 55%;
+  border-radius: 25px;
+  outline: 0.5px solid rgba(255, 255, 255, 0.489);
+}
+
+.RegisterSection {
+  position: absolute;
+  display: flex;
+  background-color: #222222;
+  justify-content: center;
+  align-items: center;
+  width: 700px;
+  height: 800px;
+  left: 55%;
+  border-radius: 25px;
+  outline: 0.5px solid rgba(255, 255, 255, 0.489);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.LogoBubble {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  height: 250px;
+  top: 20px;
+  border-radius: 50%;
+}
+
+.LogoBubble span {
+  font-size: 200px;
+  color: white;
+  font-weight: lighter;
+}
+
+.LoginCredentials {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  background-color: transparent;
+  width: 600px;
+  height: 400px;
+  top: 30%;
+}
+
+.UsernameInput {
+  position: relative;
+  width: 75%;
+  height: 45px;
+  left: 50px;
+  border-radius: 5px;
+  background-color: #111111;
+  outline: none;
+  border: 1px solid white;
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 16px;
+  padding-left: 50px;
+}
+
+.UsernameInput::placeholder {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+.UsernameInput:focus::placeholder {
+  opacity: 0;
+}
+
+.PasswordInput {
+  position: relative;
+  width: 60%;
+  height: 45px;
+  left: 50px;
+  border-radius: 5px;
+  padding-left: 50px;
+  background-color: #111111;
+  outline: none;
+  border: 1px solid white;
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 16px;
+}
+
+.PasswordInput::placeholder {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+.PasswordInput:focus::placeholder {
+  opacity: 0;
+}
+
+.EyeBubble {
+  display: flex;
+  position: absolute;
+  left: 80%;
+  top: 55%;
+  background-color: #111111;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  justify-content: center;
+  align-items: center;
+  outline: 1px solid white;
+}
+
+.EyeBubble span {
+  position: absolute;
+  font-size: 25px;
+  color: white;
+  font-weight: 100;
+}
+
+#HiddenEye {
+  opacity: 1;
+}
+
+#SeeEye {
+  opacity: 0;
+}
+
+.SigninBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #111111;
+  color: white;
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
+  font-size: 25px;
+  font-family: "Lato", sans-serif;
+  outline: 1px solid white;
+  top: 75%;
+  left: 50px;
+}
+
+.UsernameBubble {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 60px;
+  top: 142px;
+  z-index: 1;
+}
+
+.UsernameBubble span {
+  color: white;
+  font-size: 30px;
+}
+
+.PasswordBubble {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 60px;
+  top: 230px;
+  z-index: 1;
+}
+
+.PasswordBubble span {
+  color: white;
+  font-size: 30px;
+}
+
+.GoogleAccount {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #111111;
+  color: white;
+  width: 300px;
+  height: 100px;
+  border-radius: 50px;
+  font-family: "Lato", sans-serif;
+  outline: 1px solid white;
+  bottom: 50px;
+  left: 200px;
+  gap: 20px;
+}
+
+.GoogleIcon {
+  font-size: 40px;
+}
+
+.GoogleName {
+  font-size: 25px;
+}
+
+.HelpBubble {
+  position: absolute;
+  display: flex;
+  width: 30px;
+  height: 30px;
+  background-color: #111111;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  top: 310px;
+  left: 45%;
+  outline: 1px solid white;
+}
+
+.HelpBubble span {
+  font-size: 20px;
+  color: white;
+}
