@@ -287,22 +287,6 @@ body {
   transition: all 0.2s ease;
 }
 
-.RegistrationSection {
-  position: absolute;
-  display: flex;
-  background-color: #222222;
-  width: 35vw;
-  height: 80vh;
-  left: 60%;
-  top: 10%;
-  border-radius: 1vw;
-  justify-content: center;
-  align-items: center;
-  outline: 0.15vw solid #333333;
-  opacity: 0;
-  pointer-events: none;
-}
-
 .UsernameSection span {
   position: absolute;
   color: white;
@@ -444,4 +428,147 @@ body {
   margin-left: 1.5vw;
   font-family: "Lato", sans-serif;
   text-wrap: nowrap;
+}
+
+.RegistrationSection {
+  position: absolute;
+  display: flex;
+  background-color: #222222;
+  width: 35vw;
+  height: 80vh;
+  left: 60%;
+  top: 10%;
+  border-radius: 1vw;
+  justify-content: center;
+  align-items: center;
+  outline: 0.15vw solid #333333;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#SignUpCredentials {
+  top: 95%;
+}
+
+.FirstName {
+  position: absolute;
+  width: 9vw;
+  height: 4.5vh;
+  border-radius: 0.2vw;
+  border: none;
+  top: 0%;
+  left: 10%;
+  background-color: #111111;
+  outline: none;
+  border: 0.1vw solid white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  padding-left: 1vw;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.LastName {
+  position: absolute;
+  width: 9vw;
+  height: 4.5vh;
+  border-radius: 0.2vw;
+  border: none;
+  top: 0%;
+  left: 44%;
+  background-color: #111111;
+  outline: none;
+  border: 0.1vw solid white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  padding-left: 1vw;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.FirstName::placeholder {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  opacity: 0.8;
+}
+
+.LastName::placeholder {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  opacity: 0.8;
+}
+
+.FirstName:focus::placeholder {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.LastName:focus::placeholder {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.EmailInput {
+  position: absolute;
+  width: 20vw;
+  height: 4.5vh;
+  border-radius: 0.2vw;
+  border: none;
+  top: 15%;
+  left: 10%;
+  background-color: #111111;
+  outline: none;
+  border: 0.1vw solid white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  padding-left: 2vw;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.EmailSection span {
+  position: absolute;
+  color: white;
+  left: 11.5%;
+  z-index: 1;
+  top: 18%;
+  font-size: 1.3vw;
+}
+
+.EmailInput::placeholder {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  opacity: 0.8;
+}
+
+.EmailInput:focus::placeholder {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+#SignUpUsername {
+  top: 35%;
+}
+
+#AC {
+  top: 38%;
+}
+
+#SignUpPassword {
+  top: 55%;
+}
+
+#LockSignup {
+  top: 58%;
+}
+
+#RegisterBtn {
+  top: 75%;
+}
+
+#RegisterVisibiltySection {
+  left: 65%;
 }

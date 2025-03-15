@@ -221,7 +221,80 @@ const Login = () => {
           </button>
         </div>
       </div>
-      <div className="RegistrationSection"></div>
+      <div className="RegistrationSection">
+        <div className="LogoSection">
+          <div className="LogoBubble">
+            <span class="material-symbols-outlined">add_task</span>
+          </div>
+          <div className="CredentialsSection" id="SignUpCredentials">
+            <div className="FirstLastNameSection">
+              <input
+                type="text"
+                className="FirstName"
+                placeholder="First Name"
+                required
+              />
+              <input
+                type="text"
+                className="LastName"
+                placeholder="Last Name"
+                required
+              />
+            </div>
+            <div className="EmailSection">
+              <div className="material-symbols-outlined">
+                <span>email</span>
+              </div>
+              <input type="email" className="EmailInput" placeholder="Email" />
+            </div>
+            <div className="UsernameSection">
+              <div className="material-symbols-outlined">
+                <span id="AC">account_circle</span>
+              </div>
+              <input
+                type="text"
+                className="UsernameInput"
+                id="SignUpUsername"
+                placeholder="Username"
+                required
+              />
+            </div>
+            <div className="PasswordSection" id="SignUpPasswordSection">
+              <div className="material-symbols-outlined">
+                <span id="LockSignup">lock</span>
+              </div>
+              <input
+                type={Visibility}
+                className="PasswordInput"
+                placeholder="Password"
+                id="SignUpPassword"
+                required
+              />
+            </div>
+            <button className="LoginBtn" id="RegisterBtn">
+              Register
+            </button>
+            <button
+              className="VisualSection"
+              id="RegisterVisibiltySection"
+              onClick={VisibilityShift}
+            >
+              <span className="material-symbols-outlined" id="HiddenEye">
+                Visibility_off
+              </span>
+              <span className="material-symbols-outlined" id="SeeEye">
+                Visibility
+              </span>
+            </button>
+          </div>
+        </div>
+        <div className="GoogleSection">
+          <button className="GoogleApiBtn">
+            <FontAwesomeIcon className="GoogleLogo" icon={faGoogle} />
+            <h1 className="GoogleLabel">Google Account</h1>
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
