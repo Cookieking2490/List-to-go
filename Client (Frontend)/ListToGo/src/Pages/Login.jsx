@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../Styles/Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -8,6 +9,9 @@ import gsap from "gsap";
 const Login = () => {
   const [Visibility, setVisibility] = useState("password");
   const [Mode, setMode] = useState("login");
+  const [Username, setUsername] = useState("");
+  const [Password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     gsap.fromTo(
@@ -129,6 +133,37 @@ const Login = () => {
     }
   };
 
+  const HandleLogin = () => {
+    fetch("http://127.0.0.1:8000/accounts/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: Username,
+        password: Password,
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Response Data:", data);
+        if (data.status === "Success") {
+          navigate("/Main");
+        } else {
+          alert("Invalid Credentials");
+        }
+      })
+      .catch((error) => {
+        console.error("Login error:", error);
+        alert("Something went wrong. Please try again.");
+      });
+  };
+
   return (
     <div className="LoginBackGround">
       <div className="LoginHook">
@@ -186,6 +221,8 @@ const Login = () => {
                 type="text"
                 className="UsernameInput"
                 placeholder="Username"
+                value={Username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
@@ -197,10 +234,14 @@ const Login = () => {
                 type={Visibility}
                 className="PasswordInput"
                 placeholder="Password"
+                value={Password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-            <button className="LoginBtn">Login</button>
+            <button className="LoginBtn" onClick={HandleLogin}>
+              Login
+            </button>
           </div>
         </div>
         <button className="VisualSection" onClick={VisibilityShift}>
