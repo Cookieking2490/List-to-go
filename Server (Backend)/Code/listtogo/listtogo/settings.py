@@ -30,7 +30,7 @@ AUTH_USER_MODEL='accounts.CustomUser'
 
 # Application definition
 CORS_ALLOWED_ORIGINS=[
-    "http://localhost:5173/",
+    "http://localhost:5173",
 ]
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommenMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'listtogo.urls'

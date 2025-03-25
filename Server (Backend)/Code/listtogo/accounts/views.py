@@ -1,28 +1,22 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.contrib.auth.hashers import check_password
-from django.db import connection
+from .models import CustomUser  
 
 @csrf_exempt
 def login_view(request):
     if request.method == "POST":
+        data = json.loads(request.body)
+        username = data.get("username")
+        password = data.get("password")
+
         try:
-            data = json.loads(request.body)
-            username = data.get("username")
-            password = data.get("password")
-
-            # Fetch user from database manually
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT password FROM users WHERE username = %s", [username])
-                user = cursor.fetchone()
-
-            if user and check_password(password, user[0]):
-                return JsonResponse({"message": "Login successful"}, status=200)
+            user = CustomUser.objects.get(username=username)  
+            if user.password == password: 
+                return JsonResponse({"status": "Success", "message": "Login successful"})
             else:
-                return JsonResponse({"error": "Invalid credentials"}, status=401)
+                return JsonResponse({"status": "Error", "message": "Invalid password"}, status=401)
+        except CustomUser.DoesNotExist:
+            return JsonResponse({"status": "Error", "message": "User not found"}, status=404)
 
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON"}, status=400)
-
-    return JsonResponse({"error": "Invalid request method"}, status=405)
+    return JsonResponse({"status": "Error", "message": "Invalid request"}, status=400)
