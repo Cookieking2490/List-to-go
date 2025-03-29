@@ -11,6 +11,11 @@ const Login = () => {
   const [Mode, setMode] = useState("login");
   const [Username, setUsername] = useState("");
   const [Password, setPassword] = useState("");
+  const [FirstName, setFirstName] = useState("");
+  const [LastName, setLastName] = useState("");
+  const [Email, setEmail] = useState("");
+  const [RegUsername, setRegUsername] = useState("");
+  const [RegPassword, setRegPassword] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -164,6 +169,36 @@ const Login = () => {
       });
   };
 
+  const HandleRegister = () => {
+    fetch("http://127.0.0.1:8000/registration/register/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firstname: FirstName,
+        lastname: LastName,
+        email: Email,
+        username: RegUsername,
+        password: RegPassword,
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Registration Success:", data);
+        alert("Registration successful!");
+      })
+      .catch((error) => {
+        console.error("Registration error:", error);
+        alert("Something went wrong. Please try again.");
+      });
+  };
+
   return (
     <div className="LoginBackGround">
       <div className="LoginHook">
@@ -273,12 +308,16 @@ const Login = () => {
                 type="text"
                 className="FirstName"
                 placeholder="First Name"
+                value={FirstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 required
               />
               <input
                 type="text"
                 className="LastName"
                 placeholder="Last Name"
+                value={LastName}
+                onChange={(e) => setLastName(e.target.value)}
                 required
               />
             </div>
@@ -286,7 +325,14 @@ const Login = () => {
               <div className="material-symbols-outlined">
                 <span>email</span>
               </div>
-              <input type="email" className="EmailInput" placeholder="Email" />
+              <input
+                type="email"
+                className="EmailInput"
+                placeholder="Email"
+                value={Email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
             <div className="UsernameSection">
               <div className="material-symbols-outlined">
@@ -297,6 +343,8 @@ const Login = () => {
                 className="UsernameInput"
                 id="SignUpUsername"
                 placeholder="Username"
+                value={RegUsername}
+                onChange={(e) => setRegUsername(e.target.value)}
                 required
               />
             </div>
@@ -309,10 +357,16 @@ const Login = () => {
                 className="PasswordInput"
                 placeholder="Password"
                 id="SignUpPassword"
+                value={RegPassword}
+                onChange={(e) => setRegPassword(e.target.value)}
                 required
               />
             </div>
-            <button className="LoginBtn" id="RegisterBtn">
+            <button
+              className="LoginBtn"
+              id="RegisterBtn"
+              onClick={HandleRegister}
+            >
               Register
             </button>
             <button
