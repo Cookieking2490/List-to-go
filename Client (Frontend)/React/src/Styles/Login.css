@@ -1,0 +1,574 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.LoginBackGround {
+  background-color: #111111;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.LoginHook {
+  position: relative;
+  display: flex;
+  background-color: #222222;
+  width: 50vw;
+  height: 30vw;
+  margin-right: auto;
+  margin-left: 5%;
+  margin-bottom: auto;
+  margin-top: 5%;
+  border-radius: 1vw;
+  outline: 0.15vw solid #333333;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.HookTitle {
+  position: absolute;
+  font-size: 3vw;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: normal;
+  left: 5%;
+  top: 0%;
+}
+
+.HookSlogan {
+  position: absolute;
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-weight: normal;
+  font-size: 1.4vw;
+  left: 5%;
+  top: 15%;
+}
+
+.HookDescriptionSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  width: 90%;
+  height: 50%;
+  left: 5%;
+  top: 25%;
+  font-size: 2vw;
+  font-family: "Lato", sans-serif;
+  font-weight: lighter;
+  color: white;
+}
+
+.HookSignUp {
+  position: absolute;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: rgba(255, 0, 0, 0);
+  width: 30vw;
+  bottom: 10%;
+  left: 5%;
+}
+
+.HookQuestion {
+  position: absolute;
+  color: white;
+  font-size: 1.5vw;
+  font-family: "Playfair Display", serif;
+  font-weight: lighter;
+  font-style: light;
+}
+
+.HookQuestionSignUp {
+  position: absolute;
+  color: white;
+  font-size: 1.5vw;
+  font-family: "Playfair Display", serif;
+  font-weight: lighter;
+  font-style: light;
+  margin-left: 0.5vw;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.HookSignUpBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #111111;
+  color: white;
+  font-family: "Lato", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  left: 60%;
+  width: 5vw;
+  height: 2vw;
+  border-radius: 0.5vw;
+  font-size: 1vw;
+  border: none;
+  outline: 0.1vw solid white;
+  text-wrap: nowrap;
+}
+
+.HookLoginBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #111111;
+  color: white;
+  font-family: "Lato", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  left: 50%;
+  width: 5vw;
+  height: 2vw;
+  border-radius: 0.5vw;
+  font-size: 1vw;
+  border: none;
+  outline: 0.1vw solid white;
+  text-wrap: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.BubbleSection {
+  position: absolute;
+  display: flex;
+  background-color: transparent;
+  bottom: 1%;
+  left: 5%;
+  width: 50vw;
+  height: 25vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.ThreeBubbles {
+  display: flex;
+  position: absolute;
+  background-color: transparent;
+  width: 50vw;
+  height: 18vh;
+  top: 0;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.Bubble1,
+.Bubble2,
+.Bubble3 {
+  display: flex;
+  background-color: white;
+  width: 8vw;
+  height: 8vw;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+}
+
+.Bubble1 span {
+  font-size: 5vw;
+}
+
+.ExecuteIcon {
+  font-size: 5vw;
+}
+
+.Bubble3 span {
+  font-size: 5vw;
+}
+
+.LabelsSection {
+  background-color: transparent;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 50vw;
+  height: 7vh;
+  justify-content: space-around;
+  align-items: center;
+  opacity: 0;
+}
+
+.PlanLabel,
+.ExecuteLabel,
+.AchieveLabel {
+  color: white;
+  font-size: 1.5vw;
+  margin-left: 2vw;
+}
+
+.LoginSection {
+  position: absolute;
+  display: flex;
+  background-color: #222222;
+  width: 35vw;
+  height: 80vh;
+  left: 60%;
+  top: 10%;
+  border-radius: 1vw;
+  justify-content: center;
+  align-items: center;
+  outline: 0.15vw solid #333333;
+}
+
+.LogoSection {
+  position: absolute;
+  display: flex;
+  background-color: transparent;
+  width: 35vw;
+  height: 30vh;
+  top: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.LogoBubble span {
+  font-size: 10vw;
+  color: white;
+}
+
+.CredentialsSection {
+  position: absolute;
+  display: flex;
+  width: 35vw;
+  height: 40vh;
+  top: 80%;
+  background-color: transparent;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  left: 10%;
+}
+
+.UsernameInput {
+  position: absolute;
+  width: 20vw;
+  height: 4.5vh;
+  border-radius: 0.2vw;
+  border: none;
+  top: 30%;
+  left: 10%;
+  background-color: #111111;
+  outline: none;
+  border: 0.1vw solid white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  padding-left: 2vw;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.PasswordInput {
+  position: absolute;
+  width: 15vw;
+  height: 4.5vh;
+  border-radius: 0.2vw;
+  border: none;
+  top: 50%;
+  left: 10%;
+  background-color: #111111;
+  outline: none;
+  border: 0.1vw solid white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  padding-left: 2vw;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.UsernameSection span {
+  position: absolute;
+  color: white;
+  left: 11.5%;
+  z-index: 1;
+  top: 33%;
+  font-size: 1.3vw;
+}
+
+.UsernameInput::placeholder {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  opacity: 0.8;
+}
+
+.PasswordInput::placeholder {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  opacity: 0.8;
+}
+
+.UsernameInput:focus::placeholder {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.PasswordInput:focus::placeholder {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.PasswordSection span {
+  position: absolute;
+  color: white;
+  left: 11.5%;
+  z-index: 1;
+  top: 53%;
+  font-size: 1.3vw;
+}
+
+.LoginBtn {
+  position: absolute;
+  width: 8vw;
+  height: 5vh;
+  left: 10%;
+  top: 70%;
+  border-radius: 0.2vw;
+  border: none;
+  outline: 0.1vw solid white;
+  background-color: #111111;
+  color: white;
+  font-size: 1vw;
+  font-family: "Lato", sans-serif;
+}
+
+.VisualSection {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5vw;
+  height: 2.5vw;
+  border-radius: 50%;
+  background-color: #111111;
+  left: 75%;
+  top: 55%;
+  outline: 0.1vw solid white;
+}
+
+#SeeEye {
+  position: absolute;
+  color: white;
+  font-size: 1.5vw;
+  opacity: 0;
+}
+
+#HiddenEye {
+  position: absolute;
+  color: white;
+  opacity: 1;
+  font-size: 1.5vw;
+}
+
+.HelpSection {
+  position: absolute;
+  display: flex;
+  background-color: #111111;
+  outline: 0.1vw solid white;
+  width: 1.8vw;
+  height: 1.8vw;
+  border-radius: 50vh;
+  top: 66%;
+  left: 48%;
+  justify-content: center;
+  align-items: center;
+}
+
+.HelpSection span {
+  color: white;
+  font-size: 1vw;
+}
+
+.GoogleSection {
+  position: absolute;
+  display: flex;
+  background-color: transparent;
+  width: 35vw;
+  height: 13.5vh;
+  bottom: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.GoogleApiBtn {
+  position: absolute;
+  display: flex;
+  width: 20vw;
+  height: 10vh;
+  border-radius: 50vh;
+  background-color: #111111;
+  color: white;
+  outline: 0.1vw solid white;
+  justify-content: flex-start;
+  align-items: center;
+  bottom: 25%;
+}
+
+.GoogleLogo {
+  color: white;
+  font-size: 2vw;
+  margin-left: 2vw;
+}
+
+.GoogleLabel {
+  color: white;
+  font-size: 1.5vw;
+  margin-left: 1.5vw;
+  font-family: "Lato", sans-serif;
+  text-wrap: nowrap;
+}
+
+.RegistrationSection {
+  position: absolute;
+  display: flex;
+  background-color: #222222;
+  width: 35vw;
+  height: 80vh;
+  left: 60%;
+  top: 10%;
+  border-radius: 1vw;
+  justify-content: center;
+  align-items: center;
+  outline: 0.15vw solid #333333;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#SignUpCredentials {
+  top: 95%;
+}
+
+.FirstName {
+  position: absolute;
+  width: 9vw;
+  height: 4.5vh;
+  border-radius: 0.2vw;
+  border: none;
+  top: 0%;
+  left: 10%;
+  background-color: #111111;
+  outline: none;
+  border: 0.1vw solid white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  padding-left: 1vw;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.LastName {
+  position: absolute;
+  width: 9vw;
+  height: 4.5vh;
+  border-radius: 0.2vw;
+  border: none;
+  top: 0%;
+  left: 44%;
+  background-color: #111111;
+  outline: none;
+  border: 0.1vw solid white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  padding-left: 1vw;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.FirstName::placeholder {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  opacity: 0.8;
+}
+
+.LastName::placeholder {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  opacity: 0.8;
+}
+
+.FirstName:focus::placeholder {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.LastName:focus::placeholder {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.EmailInput {
+  position: absolute;
+  width: 20vw;
+  height: 4.5vh;
+  border-radius: 0.2vw;
+  border: none;
+  top: 15%;
+  left: 10%;
+  background-color: #111111;
+  outline: none;
+  border: 0.1vw solid white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  padding-left: 2vw;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.EmailSection span {
+  position: absolute;
+  color: white;
+  left: 11.5%;
+  z-index: 1;
+  top: 18%;
+  font-size: 1.3vw;
+}
+
+.EmailInput::placeholder {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  opacity: 0.8;
+}
+
+.EmailInput:focus::placeholder {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+#SignUpUsername {
+  top: 35%;
+}
+
+#AC {
+  top: 38%;
+}
+
+#SignUpPassword {
+  top: 55%;
+}
+
+#LockSignup {
+  top: 58%;
+}
+
+#RegisterBtn {
+  top: 75%;
+}
+
+#RegisterVisibiltySection {
+  left: 65%;
+}

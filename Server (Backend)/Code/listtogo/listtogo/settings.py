@@ -32,6 +32,15 @@ AUTH_USER_MODEL='accounts.CustomUser'
 CORS_ALLOWED_ORIGINS=[
     "http://localhost:5173",
 ]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
+CSRF_COOKIE_SECURE = False  # Set to True only in production with HTTPS
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = "Lax"  # Can be "Strict" or "None" depending on your needs
+
+CORS_ALLOW_CREDENTIALS = True  # Allow sending cookies from frontend
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,8 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'tasks',
-    'registration',
     'corsheaders',
+    'registration',
 ]
 
 MIDDLEWARE = [

@@ -1,17 +1,18 @@
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm
 from django.contrib import messages
-
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+@csrf_exempt
 def register(request):
-    form = RegistrationForm()
     if request.method == "POST":
-        form = RegistrationForm(request.POST)
+        data = json.loads(request.body) 
+        form = RegistrationForm(data)
         if form.is_valid():
             form.save()
-            messages.success(request, "You have registered successfully!")
+            return JsonResponse({"message": "Registration successful!"}, status=201)
         else:
-            messages.error(request, "Registration failed!")
-        return redirect('register')
+            return JsonResponse({"error": form.errors}, status=400)
 
-    return render(request, 'registration/register.html', {'form': form, })
+    return JsonResponse({"error": "Invalid request method"}, status=405)
