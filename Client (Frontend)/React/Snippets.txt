@@ -1,0 +1,26 @@
+
+.SignInPasswordInp {
+  width: 100%;
+  height: 100%;
+  padding-left: 40px;
+  background-color: black;
+  color: teal;
+  font-family: "Playfair Display", serif;
+  font-size: 16px;
+  border: 1px solid teal;
+  border-radius: 5px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.SignInPasswordInp::placeholder {
+  color: teal;
+  font-family: "Playfair Display", serif;
+  font-size: 14px;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+.SignInPasswordInp:focus::placeholder {
+  opacity: 0;
+}
