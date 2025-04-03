@@ -22,4 +22,7 @@ urlpatterns = [
     path('accounts/',include('accounts.urls')),
     path('tasks/',include('tasks.urls')),
     path('registration/', include('registration.urls')),
+    path('send-reset-code/',include('forgetpassword.urls')),
+    path('verify-reset-code/',include('forgetpassword.urls')),
+    path('reset-password/',include('forgetpassword.urls')),
 ]
