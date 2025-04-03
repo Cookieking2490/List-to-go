@@ -4,11 +4,14 @@ import "../Styles/Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import gsap from "gsap";
 
 const Login = () => {
   const [Visibility, setVisibility] = useState("password");
   const [Mode, setMode] = useState("login");
+  const [ForgetPassMode, setForgetPassMode] = useState("Hidden");
+  const [OTPMode, setOTPMode] = useState("MailMode");
   const [Username, setUsername] = useState("");
   const [Password, setPassword] = useState("");
   const [FirstName, setFirstName] = useState("");
@@ -16,6 +19,7 @@ const Login = () => {
   const [Email, setEmail] = useState("");
   const [RegUsername, setRegUsername] = useState("");
   const [RegPassword, setRegPassword] = useState("");
+  const [userEmail, setuserEmail] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -122,6 +126,20 @@ const Login = () => {
     }
   }, [Mode]);
 
+  useEffect(() => {
+    if (ForgetPassMode == "visible") {
+      gsap.to(".PopupForgetPassword", {
+        opacity: 1,
+        pointerEvents: "all",
+      });
+    } else if (ForgetPassMode == "Hidden") {
+      gsap.to(".PopupForgetPassword", {
+        opacity: 0,
+        pointerEvents: "none",
+      });
+    }
+  }, [ForgetPassMode]);
+
   const VisibilityShift = () => {
     if (Visibility == "text") {
       setVisibility("password");
@@ -135,6 +153,14 @@ const Login = () => {
       setMode("signup");
     } else if (Mode == "signup") {
       setMode("login");
+    }
+  };
+
+  const ForgetPasswordPopup = () => {
+    if (ForgetPassMode == "Hidden") {
+      setForgetPassMode("visible");
+    } else if (ForgetPassMode == "visible") {
+      setForgetPassMode("Hidden");
     }
   };
 
@@ -175,28 +201,40 @@ const Login = () => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
-        firstname: FirstName,
-        lastname: LastName,
+        first_name: FirstName,
+        last_name: LastName,
         email: Email,
         username: RegUsername,
         password: RegPassword,
       }),
     })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
-        console.log("Registration Success:", data);
-        alert("Registration successful!");
+        if (data.message) {
+          console.log("Registration Success:", data);
+          alert("Registration successful!");
+        } else {
+          console.error("Registration error:", data.error);
+          alert("Registration failed: " + JSON.stringify(data.error));
+        }
       })
       .catch((error) => {
-        console.error("Registration error:", error);
+        console.error("Request failed:", error);
         alert("Something went wrong. Please try again.");
       });
+  };
+
+  const HandleVerification = () => {
+    fetch("http://127.0.0.1:8000/send-reset-code/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail }),
+    })
+      .then((res) => res.json())
+      .then((data) => alert(data.message))
+      .catch((error) => console.error("Error:", error));
   };
 
   return (
@@ -287,9 +325,9 @@ const Login = () => {
             Visibility
           </span>
         </button>
-        <div className="HelpSection">
+        <button className="HelpSection" onClick={ForgetPasswordPopup}>
           <span className="material-symbols-outlined">question_mark</span>
-        </div>
+        </button>
         <div className="GoogleSection">
           <button className="GoogleApiBtn">
             <FontAwesomeIcon className="GoogleLogo" icon={faGoogle} />
@@ -389,6 +427,28 @@ const Login = () => {
             <h1 className="GoogleLabel">Google Account</h1>
           </button>
         </div>
+      </div>
+      <div className="PopupForgetPassword">
+        <button className="ClosePopupBtn">
+          <FontAwesomeIcon
+            className="CloseLogo"
+            icon={faXmark}
+            onClick={ForgetPasswordPopup}
+          />
+        </button>
+        <h1 className="ForgotPassword">Forgot Password ?</h1>
+        <p className="ForgotExplanation">
+          Enter your email below to recieve a code to reset your password
+        </p>
+        <input
+          type="email"
+          className="LostEmail"
+          value={userEmail}
+          onChange={(e) => setuserEmail(e.target.value)}
+        />
+        <button className="VerifyLostBtn" onClick={HandleVerification}>
+          Verify
+        </button>
       </div>
     </div>
   );
