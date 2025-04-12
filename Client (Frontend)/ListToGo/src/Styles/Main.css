@@ -1,7 +1,387 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
 .MainPageBackground {
   background-color: #949adc;
   height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.DecorSectionOne {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  position: absolute;
+  background-color: transparent;
+  width: 17.5vw;
+  height: 100vh;
+  left: 0;
+}
+
+.DecorOne {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: white;
+  width: 4vw;
+  height: 25vh;
+  border-top-right-radius: 50vh;
+  border-top-left-radius: 50vh;
+}
+
+.DecorOneInside {
+  position: absolute;
+  background-color: #949adc;
+  width: 2vw;
+  height: 20vh;
+  bottom: 0;
+  border-top-right-radius: 50vh;
+  border-top-left-radius: 50vh;
+}
+
+.DecorTwo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  width: 4vw;
+  height: 50vh;
+  border-top-right-radius: 50vh;
+  border-top-left-radius: 50vh;
+}
+
+.DecorTwoInside {
+  position: absolute;
+  background-color: #949adc;
+  width: 2vw;
+  height: 45vh;
+  bottom: 0;
+  border-top-right-radius: 50vh;
+  border-top-left-radius: 50vh;
+}
+
+.DecorThree {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  width: 4vw;
+  height: 75vh;
+  border-top-right-radius: 50vh;
+  border-top-left-radius: 50vh;
+}
+
+.DecorThreeInside {
+  position: absolute;
+  background-color: #949adc;
+  width: 2vw;
+  height: 70vh;
+  bottom: 0;
+  border-top-right-radius: 50vh;
+  border-top-left-radius: 50vh;
+}
+
+.DecorSectionTwo {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  position: absolute;
+  background-color: transparent;
+  width: 17.5vw;
+  height: 100vh;
+  right: 0;
+  transform: scaleX(-1);
+}
+
+.ToolsSection {
+  position: absolute;
+  display: flex;
+  width: 65vw;
+  height: 10vh;
+  background-color: white;
+  top: 15vh;
+  border-radius: 0.25vw;
+  justify-content: space-around;
+  align-items: center;
+  gap: -10vw;
+}
+
+.NewTaskSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10vw;
+  height: 4vh;
+  background-color: #949adc;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+}
+
+.NewTask {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10vw;
+  height: 4vh;
+  background-color: #949adc;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  border: none;
+  text-wrap: nowrap;
+}
+
+.PlusIcon {
+  position: relative;
+  width: 2.5vw;
+  height: 2.5vh;
+  right: 5%;
+}
+
+.CategoriesSection {
+  position: relative;
+  display: flex;
+  width: 10vw;
+  height: 4vh;
+  background-color: #949adc;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  justify-content: center;
+  align-items: center;
+  outline: 0.15vw solid #000000;
+}
+
+.CategoryFilterBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10vw;
+  height: 4vh;
+  background-color: #949adc;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  border: none;
+}
+
+.FilterIcon {
+  position: relative;
+  display: flex;
+  width: 2.5vw;
+  height: 2.5vh;
+  right: 5%;
+}
+
+.SearchSection {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  display: flex;
+  width: 15vw;
+  height: 4vh;
+}
+
+.SearchInput {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15vw;
+  height: 4vh;
+  background-color: transparent;
+  outline: 0.15vw solid #949adc;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  border: none;
+  border-radius: 50vh;
+  padding-left: 4%;
+  transition: opacity 0.2s ease, font-size 0.2s ease;
+}
+
+.SearchIcon {
+  position: relative;
+  display: flex;
+  width: 2.5vw;
+  height: 2.5vh;
+  right: 12%;
+  rotate: 90deg;
+}
+
+.SearchInput::placeholder {
+  color: rgb(0, 0, 0);
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  opacity: 0.8;
+}
+
+.SearchInput:focus::placeholder {
+  opacity: 0;
+  transition: 0.3s ease;
+}
+
+.ColorChangeBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5vw;
+  height: 2.5vw;
+  background-color: #949adc;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  border: none;
+  outline: 0.15vw solid #000000;
+}
+
+.LogoutBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5vw;
+  height: 2.5vw;
+  background-color: #949adc;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  border: none;
+  outline: 0.15vw solid #000000;
+}
+
+.TodoSection {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 65vw;
+  height: 70vh;
+  bottom: 1%;
+  background-color: white;
+  border-radius: 0.5vw;
+  overflow: auto;
+}
+
+.InfoBarSection {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  background-color: transparent;
+  flex-direction: row;
+  outline: 0.15vw solid #000000;
+  width: 50vw;
+  height: 10vh;
+  top: 10%;
+  left: 13%;
+}
+
+.Aspect {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  width: 8vw;
+  height: 4vh;
+  border-radius: 0.25vw;
+}
+
+.ProgressAspect {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  width: 20vw;
+  height: 4vh;
+  border-radius: 0.25vw;
+}
+.ListSection {
+  position: absolute;
+  top: 25%;
+  width: 55vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: rgba(158, 30, 30, 0);
+  border-radius: 0.25vw;
+  margin: 0;
+  padding: 0;
+}
+
+.TaskItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(24, 163, 110, 0);
+  width: 100%;
+  height: 10vh;
+  margin: 0;
+  padding: 0;
+  outline: 0.1vw solid #949adc;
+  border-bottom: none;
+}
+
+.CircularList {
+  display: flex;
+  position: absolute;
+  background-color: #949adc;
+  width: 50vw;
+  height: 5vh;
+  border-radius: 50vh;
+  left: 7.5%;
+  justify-content: center;
+  align-items: center;
+  font-family: "latto", sans-serif;
+  font-size: 1.2vw;
+}
+
+.CompleteTask {
+  position: absolute;
+  background-color: #949adc;
+  width: 2vw;
+  height: 4vh;
+  left: 1.5vw;
+  border-radius: 0.15vw;
+}
+
+.TaskName {
+  position: absolute;
+  left: 7%;
+  font-family: "latto", sans-serif;
+  font-size: 1vw;
+}
+
+.TaskStatus {
+  position: absolute;
+  left: 22%;
+  font-family: "latto", sans-serif;
+  font-size: 1vw;
+}
+
+.TaskDueDate {
+  position: absolute;
+  left: 41%;
+  font-size: 1vw;
+  font-family: "latto", sans-serif;
+}
+
+.TaskProgress {
+  position: absolute;
+  left: 60%;
+  width: 30%;
+  height: 50%;
+  background-color: #949adc;
+  border-radius: 0.15vw;
 }
