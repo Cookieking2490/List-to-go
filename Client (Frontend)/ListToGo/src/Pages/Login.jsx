@@ -11,7 +11,7 @@ const Login = () => {
   const [Visibility, setVisibility] = useState("password");
   const [Mode, setMode] = useState("login");
   const [ForgetPassMode, setForgetPassMode] = useState("Hidden");
-  const [OTPMode, setOTPMode] = useState("MailMode");
+  const [OTPMode, setOTPMode] = useState("hidden");
   const [Username, setUsername] = useState("");
   const [Password, setPassword] = useState("");
   const [FirstName, setFirstName] = useState("");
@@ -20,6 +20,7 @@ const Login = () => {
   const [RegUsername, setRegUsername] = useState("");
   const [RegPassword, setRegPassword] = useState("");
   const [userEmail, setuserEmail] = useState("");
+  const [enteredCode, setEnteredCode] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -140,6 +141,20 @@ const Login = () => {
     }
   }, [ForgetPassMode]);
 
+  useEffect(() => {
+    if (OTPMode == "hidden") {
+      gsap.to(".OTPModePopup", {
+        opacity: 0,
+        pointerEvents: "none",
+      });
+    } else if (OTPMode == "visible") {
+      gsap.to(".OTPModePopup", {
+        opacity: 1,
+        pointerEvents: "all",
+      });
+    }
+  });
+
   const VisibilityShift = () => {
     if (Visibility == "text") {
       setVisibility("password");
@@ -161,6 +176,14 @@ const Login = () => {
       setForgetPassMode("visible");
     } else if (ForgetPassMode == "visible") {
       setForgetPassMode("Hidden");
+    }
+  };
+
+  const CloseOTPPopup = () => {
+    if (OTPMode == "hidden") {
+      setOTPMode("visible");
+    } else if (OTPMode == "visible") {
+      setOTPMode("hidden");
     }
   };
 
@@ -231,6 +254,19 @@ const Login = () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: userEmail }),
+    })
+      .then((res) => res.json())
+      .then((data) => alert(data.message))
+      .catch((error) => console.error("Error:", error));
+    setForgetPassMode("Hidden");
+    setOTPMode("visible");
+  };
+
+  const HandleOTPVerification = () => {
+    fetch("http://127.0.0.1:8000/forget-password/verify-reset-code/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail, code: enteredCode }),
     })
       .then((res) => res.json())
       .then((data) => alert(data.message))
@@ -429,12 +465,8 @@ const Login = () => {
         </div>
       </div>
       <div className="PopupForgetPassword">
-        <button className="ClosePopupBtn">
-          <FontAwesomeIcon
-            className="CloseLogo"
-            icon={faXmark}
-            onClick={ForgetPasswordPopup}
-          />
+        <button className="ClosePopupBtn" onClick={ForgetPasswordPopup}>
+          <FontAwesomeIcon className="CloseLogo" icon={faXmark} />
         </button>
         <h1 className="ForgotPassword">Forgot Password ?</h1>
         <p className="ForgotExplanation">
@@ -447,6 +479,24 @@ const Login = () => {
           onChange={(e) => setuserEmail(e.target.value)}
         />
         <button className="VerifyLostBtn" onClick={HandleVerification}>
+          Verify
+        </button>
+      </div>
+      <div className="OTPModePopup">
+        <button className="CloseOTPPopup" onClick={CloseOTPPopup}>
+          <FontAwesomeIcon className="CloseLogo" icon={faXmark} />
+        </button>
+        <h1 className="OTPModeTitle">Enter the OTP</h1>
+        <p className="OTPModeExplanation">
+          Enter the OTP sent to your email to reset your password
+        </p>
+        <input
+          type="number"
+          className="OTPModeInput"
+          placeholder="Enter OTP"
+          onChange={(e) => setEnteredCode(e.target.value)}
+        />
+        <button className="VerifyOTPBtn" onClick={HandleOTPVerification}>
           Verify
         </button>
       </div>
