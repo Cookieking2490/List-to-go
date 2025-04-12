@@ -20,6 +20,7 @@ const Login = () => {
   const [RegUsername, setRegUsername] = useState("");
   const [RegPassword, setRegPassword] = useState("");
   const [userEmail, setuserEmail] = useState("");
+  const [enteredCode, setEnteredCode] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -261,6 +262,17 @@ const Login = () => {
     setOTPMode("visible");
   };
 
+  const HandleOTPVerification = () => {
+    fetch("http://127.0.0.1:8000/verify-reset-code/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail, code: enteredCode }),
+    })
+      .then((res) => res.json())
+      .then((data) => alert(data.message))
+      .catch((error) => console.error("Error:", error));
+  };
+
   return (
     <div className="LoginBackGround">
       <div className="LoginHook">
@@ -478,8 +490,15 @@ const Login = () => {
         <p className="OTPModeExplanation">
           Enter the OTP sent to your email to reset your password
         </p>
-        <input type="number" className="OTPModeInput" placeholder="Enter OTP" />
-        <button className="VerifyOTPBtn">Verify</button>
+        <input
+          type="number"
+          className="OTPModeInput"
+          placeholder="Enter OTP"
+          onChange={(e) => setEnteredCode(e.target.value)}
+        />
+        <button className="VerifyOTPBtn" onClick={HandleOTPVerification}>
+          Verify
+        </button>
       </div>
     </div>
   );

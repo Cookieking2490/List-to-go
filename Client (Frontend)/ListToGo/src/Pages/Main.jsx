@@ -156,6 +156,19 @@ const Main = () => {
         </div>
       </div>
       <div className="DecorSectionThree"></div>
+      <div className="NewTaskPopup">
+        <h1 className="TaskNamePopup">Task Name</h1>
+        <input type="text" className="TaskNameInput" />
+        <h1 className="TaskStatusPopup"></h1>
+        <select className="TaskStatusSelect">
+          <option value="">Not started</option>
+          <option value="">In Progress</option>
+          <option value="">Completed</option>
+        </select>
+        <h1 className="TaskDueDatePopup">Due date</h1>
+        <input type="date" className="TaskDueDateInput" />
+        <h1 className="CategoryPopup"></h1>
+      </div>
     </div>
   );
 };
