@@ -4,11 +4,14 @@ import "../Styles/Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import gsap from "gsap";
 
 const Login = () => {
   const [Visibility, setVisibility] = useState("password");
   const [Mode, setMode] = useState("login");
+  const [ForgetPassMode, setForgetPassMode] = useState("Hidden");
+  const [OTPMode, setOTPMode] = useState("hidden");
   const [Username, setUsername] = useState("");
   const [Password, setPassword] = useState("");
   const [FirstName, setFirstName] = useState("");
@@ -16,6 +19,8 @@ const Login = () => {
   const [Email, setEmail] = useState("");
   const [RegUsername, setRegUsername] = useState("");
   const [RegPassword, setRegPassword] = useState("");
+  const [userEmail, setuserEmail] = useState("");
+  const [enteredCode, setEnteredCode] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -122,6 +127,34 @@ const Login = () => {
     }
   }, [Mode]);
 
+  useEffect(() => {
+    if (ForgetPassMode == "visible") {
+      gsap.to(".PopupForgetPassword", {
+        opacity: 1,
+        pointerEvents: "all",
+      });
+    } else if (ForgetPassMode == "Hidden") {
+      gsap.to(".PopupForgetPassword", {
+        opacity: 0,
+        pointerEvents: "none",
+      });
+    }
+  }, [ForgetPassMode]);
+
+  useEffect(() => {
+    if (OTPMode == "hidden") {
+      gsap.to(".OTPModePopup", {
+        opacity: 0,
+        pointerEvents: "none",
+      });
+    } else if (OTPMode == "visible") {
+      gsap.to(".OTPModePopup", {
+        opacity: 1,
+        pointerEvents: "all",
+      });
+    }
+  });
+
   const VisibilityShift = () => {
     if (Visibility == "text") {
       setVisibility("password");
@@ -135,6 +168,22 @@ const Login = () => {
       setMode("signup");
     } else if (Mode == "signup") {
       setMode("login");
+    }
+  };
+
+  const ForgetPasswordPopup = () => {
+    if (ForgetPassMode == "Hidden") {
+      setForgetPassMode("visible");
+    } else if (ForgetPassMode == "visible") {
+      setForgetPassMode("Hidden");
+    }
+  };
+
+  const CloseOTPPopup = () => {
+    if (OTPMode == "hidden") {
+      setOTPMode("visible");
+    } else if (OTPMode == "visible") {
+      setOTPMode("hidden");
     }
   };
 
@@ -175,7 +224,7 @@ const Login = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",  // Ensure cookies are included
+      credentials: "include",
       body: JSON.stringify({
         first_name: FirstName,
         last_name: LastName,
@@ -184,7 +233,7 @@ const Login = () => {
         password: RegPassword,
       }),
     })
-      .then((res) => res.json())  // Convert response to JSON
+      .then((res) => res.json())
       .then((data) => {
         if (data.message) {
           console.log("Registration Success:", data);
@@ -198,6 +247,30 @@ const Login = () => {
         console.error("Request failed:", error);
         alert("Something went wrong. Please try again.");
       });
+  };
+
+  const HandleVerification = () => {
+    fetch("http://127.0.0.1:8000/forget-password/send-reset-code/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail }),
+    })
+      .then((res) => res.json())
+      .then((data) => alert(data.message))
+      .catch((error) => console.error("Error:", error));
+    setForgetPassMode("Hidden");
+    setOTPMode("visible");
+  };
+
+  const HandleOTPVerification = () => {
+    fetch("http://127.0.0.1:8000/forget-password/verify-reset-code/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail, code: enteredCode }),
+    })
+      .then((res) => res.json())
+      .then((data) => alert(data.message))
+      .catch((error) => console.error("Error:", error));
   };
 
   return (
@@ -288,9 +361,9 @@ const Login = () => {
             Visibility
           </span>
         </button>
-        <div className="HelpSection">
+        <button className="HelpSection" onClick={ForgetPasswordPopup}>
           <span className="material-symbols-outlined">question_mark</span>
-        </div>
+        </button>
         <div className="GoogleSection">
           <button className="GoogleApiBtn">
             <FontAwesomeIcon className="GoogleLogo" icon={faGoogle} />
@@ -390,6 +463,42 @@ const Login = () => {
             <h1 className="GoogleLabel">Google Account</h1>
           </button>
         </div>
+      </div>
+      <div className="PopupForgetPassword">
+        <button className="ClosePopupBtn" onClick={ForgetPasswordPopup}>
+          <FontAwesomeIcon className="CloseLogo" icon={faXmark} />
+        </button>
+        <h1 className="ForgotPassword">Forgot Password ?</h1>
+        <p className="ForgotExplanation">
+          Enter your email below to recieve a code to reset your password
+        </p>
+        <input
+          type="email"
+          className="LostEmail"
+          value={userEmail}
+          onChange={(e) => setuserEmail(e.target.value)}
+        />
+        <button className="VerifyLostBtn" onClick={HandleVerification}>
+          Verify
+        </button>
+      </div>
+      <div className="OTPModePopup">
+        <button className="CloseOTPPopup" onClick={CloseOTPPopup}>
+          <FontAwesomeIcon className="CloseLogo" icon={faXmark} />
+        </button>
+        <h1 className="OTPModeTitle">Enter the OTP</h1>
+        <p className="OTPModeExplanation">
+          Enter the OTP sent to your email to reset your password
+        </p>
+        <input
+          type="number"
+          className="OTPModeInput"
+          placeholder="Enter OTP"
+          onChange={(e) => setEnteredCode(e.target.value)}
+        />
+        <button className="VerifyOTPBtn" onClick={HandleOTPVerification}>
+          Verify
+        </button>
       </div>
     </div>
   );

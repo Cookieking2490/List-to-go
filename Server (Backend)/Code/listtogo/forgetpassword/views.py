@@ -2,11 +2,12 @@ from django.shortcuts import render
 import random
 from django.core.mail import send_mail
 from django.http import JsonResponse
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
 
+User = get_user_model()
 reset_codes = {}
 
 @csrf_exempt
