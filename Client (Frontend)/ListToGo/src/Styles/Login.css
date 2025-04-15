@@ -743,3 +743,111 @@ body {
   font-size: 1vw;
   font-family: "Lato", sans-serif;
 }
+
+.ChangePassPopup {
+  position: absolute;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #222222;
+  outline: 0.1vw solid white;
+  width: 50vw;
+  height: 35vh;
+  top: 35vh;
+  border-radius: 0.5vh;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.CloseChangePassPopup {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3vw;
+  height: 3vw;
+  border-radius: 50vh;
+  top: 5%;
+  left: 90%;
+  border: none;
+  background-color: transparent;
+  outline: 0.1vw solid white;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ChangePassTitle {
+  position: absolute;
+  font-size: 3vw;
+  color: white;
+  font-family: "Montserrat", sans-serif;
+  font-weight: normal;
+  left: 5%;
+  top: 0%;
+}
+
+.ChangePassExplanation {
+  position: absolute;
+  font-size: 2vw;
+  color: white;
+  font-family: "Lato", sans-serif;
+  font-weight: normal;
+  left: 5%;
+  top: 25%;
+}
+
+.ChangePassInput {
+  position: absolute;
+  width: 20vw;
+  height: 4.5vh;
+  border-radius: 0.2vw;
+  border: none;
+  bottom: 10%;
+  left: 5%;
+  background-color: #111111;
+  outline: none;
+  border: 0.1vw solid white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  padding-left: 0.5vw;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.ChangePassInput::placeholder {
+  color: white;
+  font-family: "Playfair Display", serif;
+  font-size: 1vw;
+  opacity: 0.8;
+}
+
+.ChangePassInput:focus::placeholder {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.ChangePassBtn {
+  position: absolute;
+  width: 8vw;
+  height: 5vh;
+  left: 50%;
+  bottom: 10%;
+  border-radius: 0.2vw;
+  border: none;
+  outline: 0.1vw solid white;
+  background-color: #111111;
+  color: white;
+  font-size: 1vw;
+  font-family: "Lato", sans-serif;
+}
+
+.OTPIncorrect {
+  position: absolute;
+  font-size: 2vw;
+  color: rgb(218, 0, 0);
+  font-family: "Lato", sans-serif;
+  font-weight: normal;
+  right: 5%;
+  bottom: 5%;
+  opacity: 0;
+}

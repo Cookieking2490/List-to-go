@@ -12,6 +12,7 @@ const Login = () => {
   const [Mode, setMode] = useState("login");
   const [ForgetPassMode, setForgetPassMode] = useState("Hidden");
   const [OTPMode, setOTPMode] = useState("hidden");
+  const [ChangePassMode, setChangePassMode] = useState("Hidden");
   const [Username, setUsername] = useState("");
   const [Password, setPassword] = useState("");
   const [FirstName, setFirstName] = useState("");
@@ -21,6 +22,7 @@ const Login = () => {
   const [RegPassword, setRegPassword] = useState("");
   const [userEmail, setuserEmail] = useState("");
   const [enteredCode, setEnteredCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -155,6 +157,20 @@ const Login = () => {
     }
   });
 
+  useEffect(() => {
+    if (ChangePassMode == "Hidden") {
+      gsap.to(".ChangePassPopup", {
+        opacity: 0,
+        pointerEvents: "none",
+      });
+    } else if (ChangePassMode == "Visible") {
+      gsap.to(".ChangePassPopup", {
+        opacity: 1,
+        pointerEvents: "all",
+      });
+    }
+  }, [ChangePassMode]);
+
   const VisibilityShift = () => {
     if (Visibility == "text") {
       setVisibility("password");
@@ -267,6 +283,24 @@ const Login = () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: userEmail, code: enteredCode }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        alert(data.message);
+
+        if (data.success || data.message === "OTP verified successfully") {
+          setOTPMode("Hidden");
+          setChangePassMode("Visible");
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+  };
+
+  const HandleChangePass = () => {
+    fetch("http://127.0.0.1:8000/reset-password/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: userEmail, new_password: newPassword }),
     })
       .then((res) => res.json())
       .then((data) => alert(data.message))
@@ -498,6 +532,22 @@ const Login = () => {
         />
         <button className="VerifyOTPBtn" onClick={HandleOTPVerification}>
           Verify
+        </button>
+      </div>
+      <div className="ChangePassPopup">
+        <button className="CloseChangePassPopup">
+          <FontAwesomeIcon className="CloseLogo" icon={faXmark} />
+        </button>
+        <h1 className="ChangePassTitle">Change Password</h1>
+        <p className="ChangePassExplanation">Enter your new password below</p>
+        <input
+          type="password"
+          className="ChangePassInput"
+          placeholder="New Password"
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+        <button className="ChangePassBtn" onClick={HandleChangePass}>
+          Change Password
         </button>
       </div>
     </div>

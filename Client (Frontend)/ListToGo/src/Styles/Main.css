@@ -385,3 +385,189 @@ body {
   background-color: #949adc;
   border-radius: 0.15vw;
 }
+
+.NewTaskPopup {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 45vw;
+  height: 50vh;
+  border-radius: 0.5vw;
+  top: 25%;
+  outline: 0.15vw solid #000000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.TaskNamePopup {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.TaskNameInput {
+  position: absolute;
+  top: 15%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.TaskStatusPopup {
+  position: absolute;
+  top: 25%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.TaskStatusSelect {
+  position: absolute;
+  top: 30%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.TaskDueDatePopup {
+  position: absolute;
+  top: 40%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.TaskDueDateInput {
+  position: absolute;
+  top: 45%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.CategoryPopup {
+  position: absolute;
+  top: 55%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.CategorySelect {
+  position: absolute;
+  top: 60%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.ProgressPopup {
+  position: absolute;
+  top: 70%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.ProgressInput {
+  position: absolute;
+  top: 75%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.PriorityPopup {
+  position: absolute;
+  top: 85%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.PrioritySelect {
+  position: absolute;
+  top: 90%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.CreateTaskBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 10vw;
+  height: 4vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 89%;
+  left: 65%;
+}
+
+.CreateTaskBtn:hover {
+  background-color: #ffffff6b;
+  transition: background-color 0.3s ease;
+}
+
+.ClosePopupBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 2.5vw;
+  height: 2.5vw;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 5%;
+  right: 5%;
+}
+
+.ClosePopupIcon {
+  position: relative;
+  display: flex;
+  width: 3.5vw;
+  height: 3.5vh;
+  right: 5%;
+}
