@@ -2,12 +2,11 @@ from django.shortcuts import render
 import random
 from django.core.mail import send_mail
 from django.http import JsonResponse
-from django.contrib.auth import get_user_model
+from accounts.models import CustomUser
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
 
-User = get_user_model()
 reset_codes = {}
 
 @csrf_exempt
@@ -18,7 +17,7 @@ def send_reset_code(request):
         email = data.get("email")
 
         try:
-            user = User.objects.get(email=email)
+            user = CustomUser.objects.get(email=email)
             reset_code = random.randint(100000, 999999)  # Generate 6-digit code
             reset_codes[email] = reset_code  # Store code temporarily
 
@@ -31,7 +30,7 @@ def send_reset_code(request):
             )
             return JsonResponse({"message": "Reset code sent!"}, status=200)
 
-        except User.DoesNotExist:
+        except CustomUser.DoesNotExist: 
             return JsonResponse({"error": "Email not found"}, status=404)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
@@ -63,13 +62,13 @@ def reset_password(request):
 
         if email in reset_codes:
             try:
-                user = User.objects.get(email=email)
-                user.set_password(new_password)
+                user = CustomUser.objects.get(email=email)
+                user.password= new_password
                 user.save()
                 del reset_codes[email]  # Remove the code after reset
                 return JsonResponse({"message": "Password reset successful!"}, status=200)
 
-            except User.DoesNotExist:
+            except CustomUser.DoesNotExist:
                 return JsonResponse({"error": "User not found"}, status=404)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
