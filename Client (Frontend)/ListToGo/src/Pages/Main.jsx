@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../Styles/Main.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,9 +8,12 @@ import {
   faMagnifyingGlass,
   faDroplet,
   faRightFromBracket,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import gsap from "gsap";
 
 const Main = () => {
+  const navigate = useNavigate();
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -82,12 +86,41 @@ const Main = () => {
       progress: 0,
     },
   ]);
+  const [NewTaskPopup, setNewTaskPopup] = useState("Hidden");
+
+  useEffect(() => {
+    if (NewTaskPopup === "Hidden") {
+      gsap.to(".NewTaskPopup", {
+        opacity: 0,
+        pointerEvents: "none",
+      });
+    } else if (NewTaskPopup === "Show") {
+      gsap.to(".NewTaskPopup", {
+        opacity: 1,
+        pointerEvents: "all",
+      });
+    }
+  });
+
+  const NewTaskPopupOpacity = () => {
+    if (NewTaskPopup === "Show") {
+      setNewTaskPopup("Hidden");
+    } else if (NewTaskPopup === "Hidden") {
+      setNewTaskPopup("Show");
+    }
+  };
+
+  const HandleLogout = () => {
+    navigate("/");
+  };
 
   return (
     <div className="MainPageBackground">
       <div className="ToolsSection">
         <div className="NewTaskSection">
-          <button className="NewTask">New Task</button>
+          <button className="NewTask" onClick={NewTaskPopupOpacity}>
+            New Task
+          </button>
           <FontAwesomeIcon icon={faPlus} className="PlusIcon" />
         </div>
         <div className="CategoriesSection">
@@ -101,7 +134,7 @@ const Main = () => {
         <button className="ColorChangeBtn">
           <FontAwesomeIcon icon={faDroplet} className="ColorIcon" />
         </button>
-        <button className="LogoutBtn">
+        <button className="LogoutBtn" onClick={HandleLogout}>
           <FontAwesomeIcon icon={faRightFromBracket} className="LogoutIcon" />
         </button>
       </div>
@@ -157,17 +190,52 @@ const Main = () => {
       </div>
       <div className="DecorSectionThree"></div>
       <div className="NewTaskPopup">
+        <button className="ClosePopupBtn" onClick={NewTaskPopupOpacity}>
+          <FontAwesomeIcon icon={faXmark} className="ClosePopupIcon" />
+        </button>
         <h1 className="TaskNamePopup">Task Name</h1>
         <input type="text" className="TaskNameInput" />
-        <h1 className="TaskStatusPopup"></h1>
+        <h1 className="TaskStatusPopup">Task Status</h1>
         <select className="TaskStatusSelect">
+          <option value="">On hold</option>
           <option value="">Not started</option>
           <option value="">In Progress</option>
           <option value="">Completed</option>
         </select>
         <h1 className="TaskDueDatePopup">Due date</h1>
         <input type="date" className="TaskDueDateInput" />
-        <h1 className="CategoryPopup"></h1>
+        <h1 className="CategoryPopup">Category</h1>
+        <select className="CategorySelect">
+          <option value="">Work</option>
+          <option value="">Personal</option>
+          <option value="">Educational</option>
+          <option value="">Health</option>
+          <option value="">Finance</option>
+          <option value="">Social</option>
+          <option value="">Hobbies</option>
+          <option value="">Fitness</option>
+          <option value="">Travel</option>
+          <option value="">Family</option>
+          <option value="">Shopping</option>
+          <option value="">Errands</option>
+          <option value="">Spiritual</option>
+          <option value="">Entertainment</option>
+          <option value="">Creative</option>
+          <option value="">Volunteer</option>
+          <option value="">Career Development</option>
+          <option value="">Events</option>
+          <option value="">Miscellaneous</option>
+          <option value="">other</option>
+        </select>
+        <h1 className="PriorityPopup">Priority</h1>
+        <select className="PrioritySelect">
+          <option value="">High</option>
+          <option value="">Medium</option>
+          <option value="">Low</option>
+        </select>
+        <h1 className="ProgressPopup">Progress</h1>
+        <input type="number" className="ProgressInput" />
+        <button className="CreateTaskBtn">Create Task</button>
       </div>
     </div>
   );
