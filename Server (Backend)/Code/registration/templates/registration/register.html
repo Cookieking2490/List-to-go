@@ -1,9 +1,0 @@
-{% for message in messages %}
-    <p style="color: green;">{{ message }}</p>
-{% endfor %}
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-</form>
