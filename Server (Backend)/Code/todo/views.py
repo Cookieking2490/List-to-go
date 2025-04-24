@@ -11,18 +11,18 @@ def create_task(request):
     form = TaskForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         task = form.save(commit=False)
-        # task.user = request.user  # assign the logged-in user
+        task.user = request.user  # assign the logged-in user
         task.save()
         return redirect('task_list')
     return render(request, 'todo/create_task.html', {'form': form})
 
 
 def task_list(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.filter(user=request.user)
     return render(request, 'todo/task_list.html', {'tasks': tasks})
 
 def edit_task(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
+    task = get_object_or_404(Task, id=task_id,user=request.user)
     if request.method == "POST":
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
@@ -33,7 +33,7 @@ def edit_task(request, task_id):
     return render(request, 'todo/edit_task.html', {'form': form, 'task': task})
 
 def delete_task(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
+    task = get_object_or_404(Task, id=task_id,user=request.user)
     if request.method == "POST":
         task.delete()
         return redirect('task_list')

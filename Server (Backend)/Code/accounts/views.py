@@ -13,7 +13,12 @@ def login_view(request):
         try:
             user = CustomUser.objects.get(username=username)  
             if user.password == password: 
-                return JsonResponse({"status": "Success", "message": "Login successful"})
+               return JsonResponse({
+                    "status": "Success",
+                    "message": "Login successful",
+                    "user_id": user.id,  # send user_id
+                    "username": user.username
+                }, status=200)
             else:
                 return JsonResponse({"status": "Error", "message": "Invalid password"}, status=401)
         except CustomUser.DoesNotExist:
