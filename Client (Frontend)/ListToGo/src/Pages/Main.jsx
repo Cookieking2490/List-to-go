@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Styles/Main.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,82 +11,76 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import gsap from "gsap";
+import { GasMeterSharp } from "@mui/icons-material";
 
 const Main = () => {
   const navigate = useNavigate();
+  const [TaskView, setTaskView] = useState("Hidden");
+  const [SelectedTask, setSelectedTask] = useState(null);
+  const [ColorMode, setColorMode] = useState("Default");
   const [tasks, setTasks] = useState([
     {
       id: 1,
       name: "Buy groceries",
+      Priority: "Low",
       status: "In Progress",
-      dueDate: "2025-04-15",
+      DueDate: "2025-04-15",
+      Category: "Personal",
       progress: 30,
     },
     {
       id: 2,
       name: "Project",
+      Priority: "High",
       status: "Completed",
-      dueDate: "2025-04-10",
+      DueDate: "2025-04-10",
+      Category: "Work",
       progress: 100,
-    },
-    {
-      id: 3,
-      name: "Gym session",
-      status: "Not started",
-      dueDate: "2025-04-20",
-      progress: 0,
-    },
-    {
-      id: 4,
-      name: "Read a book",
-      status: "In Progress",
-      dueDate: "2025-04-25",
-      progress: 50,
-    },
-    {
-      id: 5,
-      name: "Clean the house",
-      status: "Not started",
-      dueDate: "2025-04-30",
-      progress: 0,
-    },
-    {
-      id: 6,
-      name: "Finish homework",
-      status: "In Progress",
-      dueDate: "2025-04-18",
-      progress: 70,
-    },
-    {
-      id: 7,
-      name: "Plan a trip",
-      status: "Not started",
-      dueDate: "2025-05-01",
-      progress: 0,
-    },
-    {
-      id: 8,
-      name: "Attend workshop",
-      status: "Completed",
-      dueDate: "2025-04-12",
-      progress: 100,
-    },
-    {
-      id: 9,
-      name: "Cook dinner",
-      status: "In Progress",
-      dueDate: "2025-04-16",
-      progress: 40,
-    },
-    {
-      id: 10,
-      name: "Write a blog post",
-      status: "Not started",
-      dueDate: "2025-04-28",
-      progress: 0,
     },
   ]);
   const [NewTaskPopup, setNewTaskPopup] = useState("Hidden");
+
+  useEffect(() => {
+    if (ColorMode === "Dark") {
+      gsap.to(".MainPageBackground", {
+        backgroundColor: "#111111",
+        color: "#ffffff",
+      });
+      gsap.to([".DecorOneInside", ".DecorTwoInside", ".DecorThreeInside"], {
+        backgroundColor: "#111111",
+      });
+      gsap.to([".ToolsSection", ".TodoSection"], {
+        backgroundColor: "#222222",
+        color: "#ffffff",
+      });
+      gsap.to(
+        [
+          ".NewTaskSection",
+          ".NewTask",
+          ".CategoriesSection",
+          ".CategoryFilterBtn",
+          ".ColorChangeBtn",
+          ".LogoutBtn",
+          ".Aspect",
+          ".ProgressAspect",
+          ".CircularList",
+          ".CompleteTask",
+        ],
+        {
+          backgroundColor: "#111111",
+          color: "#ffffff",
+          outlineColor: "#ffffff",
+        }
+      );
+      gsap.to(".SearchInput", {
+        color: "#ffffff",
+        outlineColor: "#ffffff",
+      });
+      gsap.to(".TaskItem", {
+        borderBottom: "0.15vw solid #ffffff",
+      });
+    }
+  }, [ColorMode]);
 
   useEffect(() => {
     if (NewTaskPopup === "Hidden") {
@@ -100,18 +94,47 @@ const Main = () => {
         pointerEvents: "all",
       });
     }
-  });
+  }, [NewTaskPopup]);
+
+  useEffect(() => {
+    if (TaskView === "Hidden") {
+      gsap.to(".TaskViewSection", {
+        opacity: 0,
+        pointerEvents: "none",
+      });
+    } else if (TaskView === "Show") {
+      gsap.to(".TaskViewSection", {
+        opacity: 1,
+        pointerEvents: "all",
+      });
+    }
+  }, [TaskView]);
+
+  const HandleColorChange = () => {
+    if (ColorMode === "Default") {
+      setColorMode("Dark");
+    } else if (ColorMode === "Dark") {
+      setColorMode("Default");
+    }
+  };
 
   const NewTaskPopupOpacity = () => {
-    if (NewTaskPopup === "Show") {
-      setNewTaskPopup("Hidden");
-    } else if (NewTaskPopup === "Hidden") {
-      setNewTaskPopup("Show");
+    setNewTaskPopup((prev) => (prev === "Show" ? "Hidden" : "Show"));
+  };
+
+  const ToggleTaskViewMode = () => {
+    if (TaskView === "Hidden") {
+      setTaskView("Show");
     }
   };
 
   const HandleLogout = () => {
     navigate("/");
+  };
+
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+    setTaskView("Show");
   };
 
   return (
@@ -131,7 +154,7 @@ const Main = () => {
           <input type="text" className="SearchInput" placeholder="Search" />
           <FontAwesomeIcon icon={faMagnifyingGlass} className="SearchIcon" />
         </div>
-        <button className="ColorChangeBtn">
+        <button className="ColorChangeBtn" onClick={HandleColorChange}>
           <FontAwesomeIcon icon={faDroplet} className="ColorIcon" />
         </button>
         <button className="LogoutBtn" onClick={HandleLogout}>
@@ -151,10 +174,13 @@ const Main = () => {
           {tasks.map((task) => (
             <div key={task.id} className="TaskItem">
               <button className="CompleteTask"></button>
-              <div className="CircularList">
+              <div
+                className="CircularList"
+                onClick={() => handleTaskClick(task)}
+              >
                 <div className="TaskName">{task.name}</div>
                 <div className="TaskStatus">{task.status}</div>
-                <div className="TaskDueDate">{task.dueDate}</div>
+                <div className="TaskDueDate">{task.DueDate}</div>{" "}
                 <input
                   type="range"
                   className="TaskProgress"
@@ -189,6 +215,7 @@ const Main = () => {
         </div>
       </div>
       <div className="DecorSectionThree"></div>
+
       <div className="NewTaskPopup">
         <button className="ClosePopupBtn" onClick={NewTaskPopupOpacity}>
           <FontAwesomeIcon icon={faXmark} className="ClosePopupIcon" />
@@ -197,46 +224,67 @@ const Main = () => {
         <input type="text" className="TaskNameInput" />
         <h1 className="TaskStatusPopup">Task Status</h1>
         <select className="TaskStatusSelect">
-          <option value="">On hold</option>
-          <option value="">Not started</option>
-          <option value="">In Progress</option>
-          <option value="">Completed</option>
+          <option>On hold</option>
+          <option>Not started</option>
+          <option>In Progress</option>
+          <option>Completed</option>
         </select>
         <h1 className="TaskDueDatePopup">Due date</h1>
         <input type="date" className="TaskDueDateInput" />
         <h1 className="CategoryPopup">Category</h1>
         <select className="CategorySelect">
-          <option value="">Work</option>
-          <option value="">Personal</option>
-          <option value="">Educational</option>
-          <option value="">Health</option>
-          <option value="">Finance</option>
-          <option value="">Social</option>
-          <option value="">Hobbies</option>
-          <option value="">Fitness</option>
-          <option value="">Travel</option>
-          <option value="">Family</option>
-          <option value="">Shopping</option>
-          <option value="">Errands</option>
-          <option value="">Spiritual</option>
-          <option value="">Entertainment</option>
-          <option value="">Creative</option>
-          <option value="">Volunteer</option>
-          <option value="">Career Development</option>
-          <option value="">Events</option>
-          <option value="">Miscellaneous</option>
-          <option value="">other</option>
+          <option>Work</option>
+          <option>Personal</option>
+          <option>Educational</option>
+          <option>Health</option>
+          <option>Finance</option>
+          <option>Social</option>
+          <option>Hobbies</option>
+          <option>Fitness</option>
+          <option>Travel</option>
+          <option>Family</option>
+          <option>Shopping</option>
+          <option>Errands</option>
+          <option>Spiritual</option>
+          <option>Entertainment</option>
+          <option>Creative</option>
+          <option>Volunteer</option>
+          <option>Career Development</option>
+          <option>Events</option>
+          <option>Miscellaneous</option>
+          <option>Other</option>
         </select>
         <h1 className="PriorityPopup">Priority</h1>
         <select className="PrioritySelect">
-          <option value="">High</option>
-          <option value="">Medium</option>
-          <option value="">Low</option>
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
         </select>
         <h1 className="ProgressPopup">Progress</h1>
         <input type="number" className="ProgressInput" />
         <button className="CreateTaskBtn">Create Task</button>
       </div>
+
+      {SelectedTask && (
+        <div className="TaskViewSection">
+          <button
+            className="CloseViewBtn"
+            onClick={() => setTaskView("Hidden")}
+          >
+            <FontAwesomeIcon icon={faXmark} className="CloseViewIcon" />
+          </button>
+          <h1 className="TaskNameView">Task Name: {SelectedTask.name}</h1>
+          <p className="TaskPriorityView">
+            Task Priority: {SelectedTask.Priority}
+          </p>
+          <p className="TaskStatusView">Task Status: {SelectedTask.status}</p>
+          <p className="TaskDueDateView">Due Date: {SelectedTask.DueDate}</p>
+          <p className="TaskCategoryView">Category: {SelectedTask.Category}</p>
+          <p className="TaskProgressView">
+            Task Progress: {SelectedTask.progress}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -571,3 +571,97 @@ body {
   height: 3.5vh;
   right: 5%;
 }
+
+.TaskViewSection {
+  width: 40vw;
+  height: 30vh;
+  background-color: #949adc;
+  outline: 0.15vw solid #000000;
+  border-radius: 0.5vw;
+  position: absolute;
+  top: 45%;
+  left: 30%;
+  display: flex;
+  flex-direction: column;
+}
+
+.CloseViewBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 2.5vw;
+  height: 2.5vw;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 5%;
+  right: 5%;
+}
+
+.TaskNameView {
+  position: absolute;
+  font-family: "Montserrat", sans-serif;
+  font-size: 2vw;
+  font-weight: 500;
+  top: 0%;
+  left: 5%;
+}
+
+.TaskPriorityView {
+  background-color: white;
+  position: absolute;
+  font-family: "latto", sans-serif;
+  font-size: 1.2vw;
+  top: 25%;
+  left: 10%;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+}
+
+.TaskStatusView {
+  background-color: white;
+
+  position: absolute;
+  font-family: "latto", sans-serif;
+  font-size: 1.2vw;
+  bottom: 0;
+  left: 10%;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+}
+
+.TaskDueDateView {
+  background-color: white;
+  position: absolute;
+  font-family: "latto", sans-serif;
+  font-size: 1.2vw;
+  top: 25%;
+  left: 60%;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+}
+
+.TaskProgressView {
+  background-color: white;
+  position: absolute;
+  font-family: "latto", sans-serif;
+  font-size: 1.2vw;
+  bottom: 0;
+  left: 60%;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+}
+
+.TaskCategoryView {
+  background-color: white;
+  position: absolute;
+  font-family: "latto", sans-serif;
+  font-size: 1.2vw;
+  top: 45%;
+  left: 38%;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+}

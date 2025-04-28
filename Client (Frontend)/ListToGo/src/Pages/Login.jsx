@@ -266,7 +266,7 @@ const Login = () => {
   };
 
   const HandleVerification = () => {
-    fetch("http://127.0.0.1:8000/send-reset-code/", {
+    fetch("http://127.0.0.1:8000/forget-password/send-reset-code/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: userEmail }),
@@ -279,7 +279,7 @@ const Login = () => {
   };
 
   const HandleOTPVerification = () => {
-    fetch("http://127.0.0.1:8000/verify-reset-code/", {
+    fetch("http://127.0.0.1:8000/forget-password/verify-reset-code/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: userEmail, code: enteredCode }),
@@ -288,7 +288,7 @@ const Login = () => {
       .then((data) => {
         alert(data.message);
 
-        if (data.success || data.message === "OTP verified successfully") {
+        if (data.success || data.message === "Code verified!") {
           setOTPMode("Hidden");
           setChangePassMode("Visible");
         }
@@ -297,13 +297,22 @@ const Login = () => {
   };
 
   const HandleChangePass = () => {
-    fetch("http://127.0.0.1:8000/reset-password/", {
+    fetch("http://127.0.0.1:8000/forget-password/reset-password/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: userEmail, new_password: newPassword }),
     })
       .then((res) => res.json())
-      .then((data) => alert(data.message))
+      .then((data) => {
+        alert(data.message);
+
+        if (data.message === "Password reset successfull") {
+          alert(
+            "Password reset successful! You can now log in with your new password."
+          );
+          setChangePassMode("Hidden");
+        }
+      })
       .catch((error) => console.error("Error:", error));
   };
 
