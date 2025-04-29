@@ -67,7 +67,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'registration',
     'forgetpassword',
-    'fetchtasks'
+    'fetchtasks',
+    'todo'
 ]
 
 MIDDLEWARE = [
