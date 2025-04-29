@@ -23,4 +23,5 @@ urlpatterns = [
     path('tasks/',include('tasks.urls')),
     path('registration/', include('registration.urls')),
     path('forget-password/', include('forgetpassword.urls')),
+    path('filter_task/<int:user_id>/<str:category>',include('filter.urls')) 
 ]
