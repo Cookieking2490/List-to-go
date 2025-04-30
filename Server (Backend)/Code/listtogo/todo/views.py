@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from tasks.models import CustomUser
+from tasks.models import Task
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
@@ -13,7 +13,7 @@ import json
 def create_task(request):
     try:
         data = json.loads(request.body)
-        task = CustomUser.objects.create(
+        task = Task.objects.create(
             user=request.user,
             task_name=data.get('task_name'),
             status=data.get('status'),
@@ -22,7 +22,7 @@ def create_task(request):
             category=data.get('category'),
             progress=data.get('progress', 0),
         )
-        return JsonResponse({'message': 'Task created successfully.', 'task_id': task.id}, status=201)
+        return JsonResponse({'message': 'Task created.', 'task_id': task.id}, status=201)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
 
@@ -31,7 +31,7 @@ def create_task(request):
 @require_http_methods(["PUT"])
 def edit_task(request, task_id):
     try:
-        task = CustomUser.objects.get(id=task_id, user=request.user)
+        task = Task.objects.get(id=task_id, user=request.user)
         data = json.loads(request.body)
         task.task_name = data.get('task_name', task.task_name)
         task.status = data.get('status', task.status)
@@ -41,7 +41,7 @@ def edit_task(request, task_id):
         task.progress = data.get('progress', task.progress)
         task.save()
         return JsonResponse({'message': 'Task updated successfully.'})
-    except CustomUser.DoesNotExist:
+    except Task.DoesNotExist:
         return JsonResponse({'error': 'Task not found.'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
@@ -51,10 +51,10 @@ def edit_task(request, task_id):
 @require_http_methods(["DELETE"])
 def delete_task(request, task_id):
     try:
-        task = CustomUser.objects.get(id=task_id, user=request.user)
+        task = Task.objects.get(id=task_id, user=request.user)
         task.delete()
         return JsonResponse({'message': 'Task deleted successfully.'})
-    except CustomUser.DoesNotExist:
+    except Task.DoesNotExist:
         return JsonResponse({'error': 'Task not found.'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
