@@ -23,6 +23,6 @@ urlpatterns = [
     path('tasks/',include('tasks.urls')),
     path('registration/', include('registration.urls')),
     path('forget-password/', include('forgetpassword.urls')),
-    path('task-list/<int:user_id>/',include('fetchtasks.urls')),
+    path('',include('fetchtasks.urls')),
     path('todo/',include('todo.urls')),
 ]
