@@ -9,8 +9,13 @@ import {
   faDroplet,
   faRightFromBracket,
   faXmark,
+  faPen,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import gsap from "gsap";
+
+const fallback = (newVal, oldVal) =>
+  newVal !== undefined && newVal !== null && newVal !== "" ? newVal : oldVal;
 
 const Main = () => {
   const navigate = useNavigate();
@@ -18,6 +23,7 @@ const Main = () => {
   const [SelectedTask, setSelectedTask] = useState(null);
   const [ColorMode, setColorMode] = useState("Default");
   const [tasks, setTasks] = useState([]);
+  const [EditMode, setEditMode] = useState("Hidden");
   const [NewTaskPopup, setNewTaskPopup] = useState("Hidden");
   const [TaskName, setTaskName] = useState("");
   const [TaskStatus, setTaskStatus] = useState("");
@@ -83,6 +89,20 @@ const Main = () => {
   }, [NewTaskPopup]);
 
   useEffect(() => {
+    if (EditMode === "Hidden") {
+      gsap.to(".EditModeSection", {
+        opacity: 0,
+        pointerEvents: "none",
+      });
+    } else if (EditMode === "Show") {
+      gsap.to(".EditModeSection", {
+        opacity: 1,
+        pointerEvents: "all",
+      });
+    }
+  }, [EditMode]);
+
+  useEffect(() => {
     if (TaskView === "Hidden") {
       gsap.to(".TaskViewSection", {
         opacity: 0,
@@ -105,7 +125,6 @@ const Main = () => {
         .then((data) => {
           console.log("Fetched tasks for user:", data);
           setTasks(data);
-          console.log("Updated tasks state:", tasks);
         })
         .catch((error) => {
           console.error("Error fetching tasks:", error);
@@ -145,58 +164,137 @@ const Main = () => {
     setTaskView("Show");
   };
 
-  const createTask = async (taskData, token) => {
-    try {
-      const response = await fetch("http://localhost:8000/api/todo/create/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
-        },
-        body: JSON.stringify(taskData),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log("Task created:", data);
-      return data;
-    } catch (error) {
-      console.error("Failed to create task:", error);
-      throw error;
+  const handleEditTask = async (e) => {
+    e.preventDefault();
+    if (!SelectedTask) {
+      console.error("No task selected for editing.");
+      return;
     }
-  };
-
-  const handleCreateTask = async () => {
+  
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
-
+  
     if (!userId || !token) {
       console.error("User ID or token not found in localStorage.");
       return;
     }
-
-    const taskData = {
-      name: TaskName,
-      status: TaskStatus,
-      DueDate: TaskDueDate,
-      Category: TaskCategory,
-      Priority: TaskPriority,
-      progress: TaskProgress,
-      user: userId,
+  
+    const updatedTaskData = {
+      task_name: fallback(TaskName, SelectedTask.task_name),
+      status: fallback(TaskStatus, SelectedTask.status),
+      due_time: fallback(TaskDueDate, SelectedTask.due_time),
+      category: fallback(TaskCategory, SelectedTask.category),
+      priority: fallback(TaskPriority, SelectedTask.priority),
+      progress: fallback(TaskProgress, SelectedTask.progress),
     };
+    
+    console.log("Sending updated task data:", updatedTaskData);
 
+  
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/todo/api/${SelectedTask.id}/edit/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${token}`,
+          },
+          body: JSON.stringify(updatedTaskData),
+        }
+      );  
+  
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message);
+        const updatedTaskList = tasks.map(task =>
+          task.id === SelectedTask.id ? { ...task, ...updatedTaskData } : task
+        );
+        setTasks(updatedTaskList);
+  
+        fetchTasks(); // Refresh tasks after update
+        setEditMode("Hidden"); // Close edit mode
+      } else {
+        console.error(result.error);
+      }
+    } catch (error) {
+      console.error("Error editing task:", error);
+    }
+  };
+  
+  const fetchTasks = async () => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/task-list/${userId}/`);
+        const data = await response.json();
+        console.log("Fetched tasks for user:", data);
+        setTasks(data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    } else {
+      console.error("User ID not found in localStorage. Redirecting to login...");
+      navigate("/");
+    }
+  };
+  
+
+  const createTask = async (taskData, token) => {
+    const response = await fetch("http://127.0.0.1:8000/todo/create-task/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`,
+      },
+      body: JSON.stringify(taskData),
+    });
+  
+    if (!response.ok) {
+      throw new Error("Failed to create task");
+    }
+  
+    return await response.json();
+  };
+  
+  const handleCreateTask = async () => {
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+  
+    if (!userId) {
+      console.error("User ID not found in localStorage.");
+      return;
+    }
+  
+    const taskData = {
+      task_name: TaskName,
+      status: TaskStatus,
+      due_time: TaskDueDate,
+      category: TaskCategory,
+      priority: TaskPriority,
+      progress: TaskProgress,
+      user_id: userId,
+    };
+  
     try {
       const newTask = await createTask(taskData, token);
       setTasks((prevTasks) => [...prevTasks, newTask]);
       setNewTaskPopup("Hidden");
+  
+      setTaskName("");
+      setTaskStatus("");
+      setTaskDueDate("");
+      setTaskCategory("");
+      setTaskPriority("");
+      setTaskProgress(0);
+
+      fetchTasks();
     } catch (error) {
       console.error("Error creating task:", error);
     }
   };
 
+  
   return (
     <div className="MainPageBackground">
       <div className="ToolsSection">
@@ -207,8 +305,20 @@ const Main = () => {
           <FontAwesomeIcon icon={faPlus} className="PlusIcon" />
         </div>
         <div className="CategoriesSection">
-          <button className="CategoryFilterBtn">Category</button>
-          <FontAwesomeIcon icon={faFilter} className="FilterIcon" />
+          <select className="CategoryFilter" defaultValue="">
+            <option value="">Category</option>
+            <option>Work</option>
+            <option>Personal</option>
+            <option>Health</option>
+            <option>Finance</option>
+            <option>Social</option>
+            <option>Fitness</option>
+            <option>Travel</option>
+            <option>Errands</option>
+            <option>Entertainment</option>
+            <option>Events</option>
+            <option>Other</option>
+          </select>
         </div>
         <div className="SearchSection">
           <input type="text" className="SearchInput" placeholder="Search" />
@@ -240,7 +350,9 @@ const Main = () => {
               >
                 <div className="TaskName">{task.task_name}</div>
                 <div className="TaskStatus">{task.status}</div>
-                <div className="TaskDueDate">{new Date(task.due_time).toLocaleDateString()}</div>{" "}
+                <div className="TaskDueDate">
+                  {new Date(task.due_time).toLocaleDateString()}
+                </div>{" "}
                 <input
                   type="range"
                   className="TaskProgress"
@@ -309,23 +421,14 @@ const Main = () => {
         >
           <option>Work</option>
           <option>Personal</option>
-          <option>Educational</option>
           <option>Health</option>
           <option>Finance</option>
           <option>Social</option>
-          <option>Hobbies</option>
           <option>Fitness</option>
           <option>Travel</option>
-          <option>Family</option>
-          <option>Shopping</option>
           <option>Errands</option>
-          <option>Spiritual</option>
           <option>Entertainment</option>
-          <option>Creative</option>
-          <option>Volunteer</option>
-          <option>Career Development</option>
           <option>Events</option>
-          <option>Miscellaneous</option>
           <option>Other</option>
         </select>
         <h1 className="PriorityPopup">Priority</h1>
@@ -352,24 +455,67 @@ const Main = () => {
 
       {SelectedTask && (
         <div className="TaskViewSection">
+          <button className="EditViewBtn" onClick={() => setEditMode("Show")}>
+            <FontAwesomeIcon icon={faPen} className="EditViewIcon" />
+          </button>
+          <button className="DeleteViewBtn">
+            <FontAwesomeIcon icon={faTrashCan} className="DeleteEditIcon" />
+          </button>
           <button
             className="CloseViewBtn"
             onClick={() => setTaskView("Hidden")}
           >
             <FontAwesomeIcon icon={faXmark} className="CloseViewIcon" />
           </button>
-          <h1 className="TaskNameView">Task Name: {SelectedTask.name}</h1>
+          <h1 className="TaskNameView">Task Name: {SelectedTask.task_name}</h1>
           <p className="TaskPriorityView">
-            Task Priority: {SelectedTask.Priority}
+            Task Priority: {SelectedTask.priority}
           </p>
           <p className="TaskStatusView">Task Status: {SelectedTask.status}</p>
-          <p className="TaskDueDateView">Due Date: {SelectedTask.DueDate}</p>
-          <p className="TaskCategoryView">Category: {SelectedTask.Category}</p>
+          <p className="TaskDueDateView">Due Date: {SelectedTask.due_time}</p>
+          <p className="TaskCategoryView">Category: {SelectedTask.category}</p>
           <p className="TaskProgressView">
             Task Progress: {SelectedTask.progress}
           </p>
         </div>
       )}
+      <div className="EditModeSection">
+        <button className="CloseEditBtn" onClick={() => setEditMode("Hidden")}>
+          <FontAwesomeIcon icon={faXmark} className="CloseEditIcon" />
+        </button>
+        <h1 className="TaskNameEdit">Task Name</h1>
+        <input type="text" className="TaskNameInput" />
+        <h1 className="TaskStatusEdit">Task Status</h1>
+        <select className="TaskStatusSelect">
+          <option>On hold</option>
+          <option>Not started</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+        </select>
+        <h1 className="TaskDueDateEdit">Due date</h1>
+        <input type="date" className="TaskDueDateInput" />
+        <h1 className="CategoryEdit">Category</h1>
+        <select className="CategorySelect">
+          <option>Work</option>
+          <option>Personal</option>
+          <option>Health</option>
+          <option>Finance</option>
+          <option>Social</option>
+          <option>Fitness</option>
+          <option>Travel</option>
+          <option>Errands</option>
+          <option>Entertainment</option>
+          <option>Events</option>
+          <option>Other</option>
+        </select>
+        <h1 className="PriorityEdit">Priority</h1>
+        <select className="PrioritySelectEdit">
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+        <button className="UpdateTaskBtn" onClick={handleEditTask}>Update Task</button>
+      </div>
     </div>
   );
 };

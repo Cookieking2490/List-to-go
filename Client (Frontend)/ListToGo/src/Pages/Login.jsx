@@ -221,10 +221,10 @@ const Login = () => {
         return res.json();
       })
       .then((data) => {
-        console.log("Response Data:", data);
-        if (data.status === "Success") {
+        if (data.status === "Success" && data.token) {  
+          localStorage.setItem("token", data.token);
           localStorage.setItem("userId", data.user_id);
-          
+
           navigate("/Main");
         } else {
           alert("Invalid Credentials");

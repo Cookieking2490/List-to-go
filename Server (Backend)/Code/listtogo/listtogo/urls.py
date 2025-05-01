@@ -24,5 +24,5 @@ urlpatterns = [
     path('registration/', include('registration.urls')),
     path('forget-password/', include('forgetpassword.urls')),
     path('',include('fetchtasks.urls')),
-    path('todo/',include('todo.urls')),
+    path('',include('todo.urls')),
 ]
