@@ -224,7 +224,7 @@ const Login = () => {
         console.log("Response Data:", data);
         if (data.status === "Success") {
           localStorage.setItem("userId", data.user_id);
-          
+
           navigate("/Main");
         } else {
           alert("Invalid Credentials");

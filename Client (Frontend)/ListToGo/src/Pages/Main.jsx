@@ -9,6 +9,8 @@ import {
   faDroplet,
   faRightFromBracket,
   faXmark,
+  faPen,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import gsap from "gsap";
 
@@ -17,7 +19,18 @@ const Main = () => {
   const [TaskView, setTaskView] = useState("Hidden");
   const [SelectedTask, setSelectedTask] = useState(null);
   const [ColorMode, setColorMode] = useState("Default");
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([
+    {
+      id: 1,
+      task_name: "Sample Task",
+      status: "Not started",
+      due_time: "2025-05-01",
+      progress: 0,
+      category: "Work",
+      priority: "High",
+    },
+  ]);
+  const [EditMode, setEditMode] = useState("Hidden");
   const [NewTaskPopup, setNewTaskPopup] = useState("Hidden");
   const [TaskName, setTaskName] = useState("");
   const [TaskStatus, setTaskStatus] = useState("");
@@ -83,6 +96,20 @@ const Main = () => {
   }, [NewTaskPopup]);
 
   useEffect(() => {
+    if (EditMode === "Hidden") {
+      gsap.to(".EditModeSection", {
+        opacity: 0,
+        pointerEvents: "none",
+      });
+    } else if (EditMode === "Show") {
+      gsap.to(".EditModeSection", {
+        opacity: 1,
+        pointerEvents: "all",
+      });
+    }
+  }, [EditMode]);
+
+  useEffect(() => {
     if (TaskView === "Hidden") {
       gsap.to(".TaskViewSection", {
         opacity: 0,
@@ -96,26 +123,27 @@ const Main = () => {
     }
   }, [TaskView]);
 
-  useEffect(() => {
-    const userId = localStorage.getItem("userId");
+  // useEffect(() => {
+  //   const userId = localStorage.getItem("userId");
 
-    if (userId) {
-      fetch(`http://127.0.0.1:8000/tasks/user/${userId}/`)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Fetched tasks for user:", data);
-          setTasks(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching tasks:", error);
-        });
-    } else {
-      console.error(
-        "User ID not found in localStorage. Redirecting to login..."
-      );
-      navigate("/");
-    }
-  }, []);
+  //   if (userId) {
+  //     fetch(`http://127.0.0.1:8000/task-list/${userId}/`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         console.log("Fetched tasks for user:", data);
+  //         setTasks(data);
+  //         console.log("Updated tasks state:", tasks);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching tasks:", error);
+  //       });
+  //   } else {
+  //     console.error(
+  //       "User ID not found in localStorage. Redirecting to login..."
+  //     );
+  //     navigate("/");
+  //   }
+  // }, []);
 
   const HandleColorChange = () => {
     if (ColorMode === "Default") {
@@ -146,7 +174,7 @@ const Main = () => {
 
   const createTask = async (taskData, token) => {
     try {
-      const response = await fetch("http://localhost:8000/api/tasks/create/", {
+      const response = await fetch("http://localhost:8000/api/todo/create/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -206,8 +234,20 @@ const Main = () => {
           <FontAwesomeIcon icon={faPlus} className="PlusIcon" />
         </div>
         <div className="CategoriesSection">
-          <button className="CategoryFilterBtn">Category</button>
-          <FontAwesomeIcon icon={faFilter} className="FilterIcon" />
+          <select className="CategoryFilter" defaultValue="">
+            <option value="">Category</option>
+            <option>Work</option>
+            <option>Personal</option>
+            <option>Health</option>
+            <option>Finance</option>
+            <option>Social</option>
+            <option>Fitness</option>
+            <option>Travel</option>
+            <option>Errands</option>
+            <option>Entertainment</option>
+            <option>Events</option>
+            <option>Other</option>
+          </select>
         </div>
         <div className="SearchSection">
           <input type="text" className="SearchInput" placeholder="Search" />
@@ -237,9 +277,11 @@ const Main = () => {
                 className="CircularList"
                 onClick={() => handleTaskClick(task)}
               >
-                <div className="TaskName">{task.name}</div>
+                <div className="TaskName">{task.task_name}</div>
                 <div className="TaskStatus">{task.status}</div>
-                <div className="TaskDueDate">{task.DueDate}</div>{" "}
+                <div className="TaskDueDate">
+                  {new Date(task.due_time).toLocaleDateString()}
+                </div>{" "}
                 <input
                   type="range"
                   className="TaskProgress"
@@ -308,23 +350,14 @@ const Main = () => {
         >
           <option>Work</option>
           <option>Personal</option>
-          <option>Educational</option>
           <option>Health</option>
           <option>Finance</option>
           <option>Social</option>
-          <option>Hobbies</option>
           <option>Fitness</option>
           <option>Travel</option>
-          <option>Family</option>
-          <option>Shopping</option>
           <option>Errands</option>
-          <option>Spiritual</option>
           <option>Entertainment</option>
-          <option>Creative</option>
-          <option>Volunteer</option>
-          <option>Career Development</option>
           <option>Events</option>
-          <option>Miscellaneous</option>
           <option>Other</option>
         </select>
         <h1 className="PriorityPopup">Priority</h1>
@@ -351,24 +384,67 @@ const Main = () => {
 
       {SelectedTask && (
         <div className="TaskViewSection">
+          <button className="EditViewBtn" onClick={() => setEditMode("Show")}>
+            <FontAwesomeIcon icon={faPen} className="EditViewIcon" />
+          </button>
+          <button className="DeleteViewBtn">
+            <FontAwesomeIcon icon={faTrashCan} className="DeleteEditIcon" />
+          </button>
           <button
             className="CloseViewBtn"
             onClick={() => setTaskView("Hidden")}
           >
             <FontAwesomeIcon icon={faXmark} className="CloseViewIcon" />
           </button>
-          <h1 className="TaskNameView">Task Name: {SelectedTask.name}</h1>
+          <h1 className="TaskNameView">Task Name: {SelectedTask.task_name}</h1>
           <p className="TaskPriorityView">
-            Task Priority: {SelectedTask.Priority}
+            Task Priority: {SelectedTask.priority}
           </p>
           <p className="TaskStatusView">Task Status: {SelectedTask.status}</p>
-          <p className="TaskDueDateView">Due Date: {SelectedTask.DueDate}</p>
-          <p className="TaskCategoryView">Category: {SelectedTask.Category}</p>
+          <p className="TaskDueDateView">Due Date: {SelectedTask.due_time}</p>
+          <p className="TaskCategoryView">Category: {SelectedTask.category}</p>
           <p className="TaskProgressView">
             Task Progress: {SelectedTask.progress}
           </p>
         </div>
       )}
+      <div className="EditModeSection">
+        <button className="CloseEditBtn" onClick={() => setEditMode("Hidden")}>
+          <FontAwesomeIcon icon={faXmark} className="CloseEditIcon" />
+        </button>
+        <h1 className="TaskNameEdit">Task Name</h1>
+        <input type="text" className="TaskNameInput" />
+        <h1 className="TaskStatusEdit">Task Status</h1>
+        <select className="TaskStatusSelect">
+          <option>On hold</option>
+          <option>Not started</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+        </select>
+        <h1 className="TaskDueDateEdit">Due date</h1>
+        <input type="date" className="TaskDueDateInput" />
+        <h1 className="CategoryEdit">Category</h1>
+        <select className="CategorySelect">
+          <option>Work</option>
+          <option>Personal</option>
+          <option>Health</option>
+          <option>Finance</option>
+          <option>Social</option>
+          <option>Fitness</option>
+          <option>Travel</option>
+          <option>Errands</option>
+          <option>Entertainment</option>
+          <option>Events</option>
+          <option>Other</option>
+        </select>
+        <h1 className="PriorityEdit">Priority</h1>
+        <select className="PrioritySelect">
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+        <button className="UpdateTaskBtn">Update Task</button>
+      </div>
     </div>
   );
 };

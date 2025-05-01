@@ -665,3 +665,170 @@ body {
   padding: 0.5vw;
   border-radius: 0.5vw;
 }
+
+.EditViewBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 2.5vw;
+  height: 2.5vw;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 5%;
+  right: 13%;
+}
+
+.DeleteViewBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 2.5vw;
+  height: 2.5vw;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 5%;
+  right: 21%;
+}
+
+.EditModeSection {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 45vw;
+  height: 50vh;
+  border-radius: 0.5vw;
+  top: 25%;
+  outline: 0.15vw solid #000000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.TaskNameEdit {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.TaskStatusEdit {
+  position: absolute;
+  top: 25%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.TaskStatusSelect {
+  position: absolute;
+  top: 30%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.TaskDueDateEdit {
+  position: absolute;
+  top: 40%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.CategoryEdit {
+  position: absolute;
+  top: 55%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.PriorityEdit {
+  position: absolute;
+  top: 70%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.PrioritySelect {
+  position: absolute;
+  top: 75%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.UpdateTaskBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 10vw;
+  height: 4vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 89%;
+  left: 65%;
+}
+
+.UpdateTaskBtn:hover {
+  background-color: #ffffff6b;
+  transition: background-color 0.3s ease;
+}
+
+.CloseEditBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 2.5vw;
+  height: 2.5vw;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 5%;
+  right: 5%;
+}
+
+.CategoryFilter {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 10vw;
+  height: 4vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
