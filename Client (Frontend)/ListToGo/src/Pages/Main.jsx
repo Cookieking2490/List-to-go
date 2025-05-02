@@ -22,17 +22,7 @@ const Main = () => {
   const [TaskView, setTaskView] = useState("Hidden");
   const [SelectedTask, setSelectedTask] = useState(null);
   const [ColorMode, setColorMode] = useState("Default");
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      task_name: "Task 1",
-      status: "On hold",
-      due_time: "2023-10-01",
-      category: "Work",
-      priority: "High",
-      progress: 0,
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
   const [EditMode, setEditMode] = useState("Hidden");
   const [NewTaskPopup, setNewTaskPopup] = useState("Hidden");
   const [TaskName, setTaskName] = useState("");
@@ -495,18 +485,18 @@ const Main = () => {
           <FontAwesomeIcon icon={faXmark} className="CloseEditIcon" />
         </button>
         <h1 className="TaskNameEdit">Task Name</h1>
-        <input type="text" className="TaskNameInput" value={TaskName || SelectedTask?.task_name} onChange={(e) => setTaskName(e.target.value)}/>
+        <input type="text" className="TaskNameInput" onChange={(e) => setTaskName(e.target.value)}/>
         <h1 className="TaskStatusEdit">Task Status</h1>
-        <select className="TaskStatusSelect"  value={TaskStatus || SelectedTask?.status} onChange={(e) => setTaskStatus(e.target.value)}>
+        <select className="TaskStatusSelect" onChange={(e) => setTaskStatus(e.target.value)}>
           <option>On hold</option>
           <option>Not started</option>
           <option>In Progress</option>
           <option>Completed</option>
         </select>
         <h1 className="TaskDueDateEdit">Due date</h1>
-        <input type="date" className="TaskDueDateInput" value={TaskStatus || SelectedTask?.due_time} onChange={(e) => setTaskStatus(e.target.value)} />
+        <input type="date" className="TaskDueDateInput" onChange={(e) => setTaskDueDate(e.target.value)} />
         <h1 className="CategoryEdit">Category</h1>
-        <select className="CategorySelect" value={TaskStatus || SelectedTask?.category} onChange={(e) => setTaskStatus(e.target.value)}>
+        <select className="CategorySelect" onChange={(e) => setTaskCategory(e.target.value)}>
           <option>Work</option>
           <option>Personal</option>
           <option>Health</option>
@@ -520,13 +510,13 @@ const Main = () => {
           <option>Other</option>
         </select>
         <h1 className="PriorityEdit">Priority</h1>
-        <select className="PrioritySelectEdit" value={TaskStatus || SelectedTask?.priority} onChange={(e) => setTaskStatus(e.target.value)}>
+        <select className="PrioritySelectEdit" onChange={(e) => setTaskPriority(e.target.value)}>
           <option>High</option>
           <option>Medium</option>
           <option>Low</option>
         </select>
         <h1 className="ProgressEdit">Progress</h1>
-        <input type="number" className="ProgressInputEdit" value={TaskStatus || SelectedTask?.progress} onChange={(e) => setTaskStatus(e.target.value)} min={0} max={100}  />
+        <input type="number" className="ProgressInputEdit" onChange={(e) => setTaskProgress(e.target.value)} min={0} max={100}  />
         <button className="UpdateTaskBtn" onClick={handleEditTask}>
           Update Task
         </button>
