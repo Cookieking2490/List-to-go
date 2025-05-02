@@ -22,6 +22,7 @@ const Main = () => {
   const [TaskView, setTaskView] = useState("Hidden");
   const [SelectedTask, setSelectedTask] = useState(null);
   const [ColorMode, setColorMode] = useState("Default");
+  const [searchQuery, setSearchQuery] = useState("");
   const [tasks, setTasks] = useState([]);
   const [EditMode, setEditMode] = useState("Hidden");
   const [NewTaskPopup, setNewTaskPopup] = useState("Hidden");
@@ -281,6 +282,49 @@ const Main = () => {
       navigate("/");
     }
   };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+  
+    if (value.trim() === "") {
+      fetchTasks();
+    }
+  };
+  
+
+  const handleSearchTask = async () => {
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+  
+    if (!userId || !token) {
+      console.error("Missing user ID or token.");
+      return;
+    }
+  
+    if (!searchQuery.trim()) {
+      fetchTasks();
+      return;
+    }
+  
+    try {
+      const response = await axios.get("http://localhost:8000/tasks/search/", {
+        params: {
+          user_id: userId,
+          task_name: searchQuery,
+        },
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+  
+      setTasks(response.data.tasks);
+    } catch (error) {
+      console.error("Error searching tasks:", error);
+    }
+  };
+  
+  
 
   const createTask = async (taskData, token) => {
     const response = await fetch("http://127.0.0.1:8000/todo/create-task/", {
