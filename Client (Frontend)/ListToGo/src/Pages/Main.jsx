@@ -295,31 +295,39 @@ const Main = () => {
     const token = localStorage.getItem("token");
 
     if (!userId || !token) {
-      console.error("Missing user ID or token.");
-      return;
+        console.error("Missing user ID or token.");
+        return;
     }
 
     if (!searchQuery.trim()) {
-      fetchTasks();
-      return;
+        fetchTasks();  // Assuming fetchTasks fetches all tasks when search is empty.
+        return;
     }
 
     try {
-      const response = await axios.get("http://localhost:8000/tasks/search/", {
-        params: {
-          user_id: userId,
-          task_name: searchQuery,
-        },
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      });
+        // Pass the task_name query parameter
+        const response = await fetch(
+            `http://127.0.0.1:8000/tasks/search/?task_name=${searchQuery}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${token}`,
+                },
+            }
+        );
 
-      setTasks(response.data.tasks);
+        if (!response.ok) {
+            throw new Error("Search failed");
+        }
+
+        const data = await response.json();
+        setTasks(data.tasks);  // Assuming 'tasks' is the key in your response JSON
     } catch (error) {
-      console.error("Error searching tasks:", error);
+        console.error("Error searching tasks:", error);
     }
-  };
+};
+
 
   const createTask = async (taskData, token) => {
     const response = await fetch("http://127.0.0.1:8000/create-task/", {
@@ -401,7 +409,7 @@ const Main = () => {
           </select>
         </div>
         <div className="SearchSection">
-          <input type="text" className="SearchInput" placeholder="Search" />
+          <input type="text" className="SearchInput" placeholder="Search" value={searchQuery} onChange={handleSearchChange} />
           <button className="SearchIconBtn" onClick={handleSearchTask}>
             <FontAwesomeIcon icon={faMagnifyingGlass} className="SearchIcon" />
           </button>
