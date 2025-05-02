@@ -25,5 +25,6 @@ urlpatterns = [
     path('forget-password/', include('forgetpassword.urls')),
     path('',include('fetchtasks.urls')),
     path('',include('todo.urls')),
-    path('',include('filter.urls'))
+    path('',include('filter.urls')),
+    path('', include('completed.urls')),
 ]
