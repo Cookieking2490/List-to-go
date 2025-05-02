@@ -14,6 +14,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import gsap from "gsap";
 
+const fallback = (newVal, oldVal) =>
+  newVal !== undefined && newVal !== null && newVal !== "" ? newVal : oldVal;
+
 const Main = () => {
   const navigate = useNavigate();
   const [TaskView, setTaskView] = useState("Hidden");
@@ -22,12 +25,12 @@ const Main = () => {
   const [tasks, setTasks] = useState([
     {
       id: 1,
-      task_name: "Sample Task",
-      status: "Not started",
-      due_time: "2025-05-01",
-      progress: 0,
+      task_name: "Task 1",
+      status: "On hold",
+      due_time: "2023-10-01",
       category: "Work",
       priority: "High",
+      progress: 0,
     },
   ]);
   const [EditMode, setEditMode] = useState("Hidden");
@@ -123,27 +126,26 @@ const Main = () => {
     }
   }, [TaskView]);
 
-  // useEffect(() => {
-  //   const userId = localStorage.getItem("userId");
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
 
-  //   if (userId) {
-  //     fetch(`http://127.0.0.1:8000/task-list/${userId}/`)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         console.log("Fetched tasks for user:", data);
-  //         setTasks(data);
-  //         console.log("Updated tasks state:", tasks);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching tasks:", error);
-  //       });
-  //   } else {
-  //     console.error(
-  //       "User ID not found in localStorage. Redirecting to login..."
-  //     );
-  //     navigate("/");
-  //   }
-  // }, []);
+    if (userId) {
+      fetch(`http://127.0.0.1:8000/task-list/${userId}/`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Fetched tasks for user:", data);
+          setTasks(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching tasks:", error);
+        });
+    } else {
+      console.error(
+        "User ID not found in localStorage. Redirecting to login..."
+      );
+      navigate("/");
+    }
+  }, []);
 
   const HandleColorChange = () => {
     if (ColorMode === "Default") {
@@ -172,31 +174,13 @@ const Main = () => {
     setTaskView("Show");
   };
 
-  const createTask = async (taskData, token) => {
-    try {
-      const response = await fetch("http://localhost:8000/api/todo/create/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
-        },
-        body: JSON.stringify(taskData),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log("Task created:", data);
-      return data;
-    } catch (error) {
-      console.error("Failed to create task:", error);
-      throw error;
+  const handleEditTask = async (e) => {
+    e.preventDefault();
+    if (!SelectedTask) {
+      console.error("No task selected for editing.");
+      return;
     }
-  };
 
-  const handleCreateTask = async () => {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
 
@@ -205,20 +189,118 @@ const Main = () => {
       return;
     }
 
+    const updatedTaskData = {
+      task_name: fallback(TaskName, SelectedTask.task_name),
+      status: fallback(TaskStatus, SelectedTask.status),
+      due_time: fallback(TaskDueDate, SelectedTask.due_time),
+      category: fallback(TaskCategory, SelectedTask.category),
+      priority: fallback(TaskPriority, SelectedTask.priority),
+      progress: fallback(TaskProgress, SelectedTask.progress),
+    };
+
+    console.log("Sending updated task data:", updatedTaskData);
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/todo/api/${SelectedTask.id}/edit/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${token}`,
+          },
+          body: JSON.stringify(updatedTaskData),
+        }
+      );
+
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message);
+        const updatedTaskList = tasks.map((task) =>
+          task.id === SelectedTask.id ? { ...task, ...updatedTaskData } : task
+        );
+        setTasks(updatedTaskList);
+
+        fetchTasks(); // Refresh tasks after update
+        setEditMode("Hidden"); // Close edit mode
+      } else {
+        console.error(result.error);
+      }
+    } catch (error) {
+      console.error("Error editing task:", error);
+    }
+  };
+
+  const fetchTasks = async () => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/task-list/${userId}/`
+        );
+        const data = await response.json();
+        console.log("Fetched tasks for user:", data);
+        setTasks(data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    } else {
+      console.error(
+        "User ID not found in localStorage. Redirecting to login..."
+      );
+      navigate("/");
+    }
+  };
+
+  const createTask = async (taskData, token) => {
+    const response = await fetch("http://127.0.0.1:8000/todo/create-task/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(taskData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create task");
+    }
+
+    return await response.json();
+  };
+
+  const handleCreateTask = async () => {
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+
+    if (!userId) {
+      console.error("User ID not found in localStorage.");
+      return;
+    }
+
     const taskData = {
-      name: TaskName,
+      task_name: TaskName,
       status: TaskStatus,
-      DueDate: TaskDueDate,
-      Category: TaskCategory,
-      Priority: TaskPriority,
+      due_time: TaskDueDate,
+      category: TaskCategory,
+      priority: TaskPriority,
       progress: TaskProgress,
-      user: userId,
+      user_id: userId,
     };
 
     try {
       const newTask = await createTask(taskData, token);
       setTasks((prevTasks) => [...prevTasks, newTask]);
       setNewTaskPopup("Hidden");
+
+      setTaskName("");
+      setTaskStatus("");
+      setTaskDueDate("");
+      setTaskCategory("");
+      setTaskPriority("");
+      setTaskProgress(0);
+
+      fetchTasks();
     } catch (error) {
       console.error("Error creating task:", error);
     }
@@ -438,12 +520,16 @@ const Main = () => {
           <option>Other</option>
         </select>
         <h1 className="PriorityEdit">Priority</h1>
-        <select className="PrioritySelect">
+        <select className="PrioritySelectEdit">
           <option>High</option>
           <option>Medium</option>
           <option>Low</option>
         </select>
-        <button className="UpdateTaskBtn">Update Task</button>
+        <h1 className="ProgressEdit">Progress</h1>
+        <input type="number" className="ProgressInputEdit" min={0} max={100} />
+        <button className="UpdateTaskBtn" onClick={handleEditTask}>
+          Update Task
+        </button>
       </div>
     </div>
   );

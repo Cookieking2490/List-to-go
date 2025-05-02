@@ -770,9 +770,30 @@ body {
   color: black;
 }
 
-.PrioritySelect {
+.PrioritySelectEdit {
   position: absolute;
   top: 75%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.ProgressEdit {
+  position: absolute;
+  top: 85%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.ProgressInputEdit {
+  position: absolute;
+  top: 90%;
   left: 25%;
   width: 15vw;
   height: 3vh;
