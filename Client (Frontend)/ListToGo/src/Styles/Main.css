@@ -209,10 +209,11 @@ body {
 .SearchIcon {
   position: relative;
   display: flex;
-  width: 2.5vw;
-  height: 2.5vh;
+  width: 2vw;
+  height: 2vh;
   right: 12%;
   rotate: 90deg;
+  align-items: center;
 }
 
 .SearchInput::placeholder {
@@ -852,4 +853,20 @@ body {
   font-size: 1.2vw;
   outline: 0.15vw solid #000000;
   border: none;
+}
+
+.SearchIconBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc00;
+  width: 1.7vw;
+  height: 1.7vw;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #00000000;
+  right: 5%;
+  border: none;
+  cursor: pointer;
 }
