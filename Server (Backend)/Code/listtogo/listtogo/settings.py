@@ -67,6 +67,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'registration',
     'forgetpassword',
+    'fetchtasks',
+    'todo',
     'filter'
 ]
 

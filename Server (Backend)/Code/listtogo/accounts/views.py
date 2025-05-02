@@ -2,6 +2,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import CustomUser  
+import secrets  # for token generation
+from django.core.cache import cache  # optional: store token->user_id mapping
 
 @csrf_exempt
 def login_view(request):
@@ -13,7 +15,17 @@ def login_view(request):
         try:
             user = CustomUser.objects.get(username=username)  
             if user.password == password: 
-                return JsonResponse({"status": "Success", "message": "Login successful"})
+                # ✅ Generate a simple random token
+                token = secrets.token_hex(16)
+
+                # ✅ Optional: store token → user mapping (expires in 1 hour)
+                cache.set(token, user.id, timeout=3600)
+                return JsonResponse({
+                    "status": "Success",
+                    "message": "Login successful",
+                    "user_id": user.id,
+                    "token": token 
+                })
             else:
                 return JsonResponse({"status": "Error", "message": "Invalid password"}, status=401)
         except CustomUser.DoesNotExist:

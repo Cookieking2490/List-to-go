@@ -221,8 +221,10 @@ const Login = () => {
         return res.json();
       })
       .then((data) => {
-        console.log("Response Data:", data);
-        if (data.status === "Success") {
+        if (data.status === "Success" && data.token) {  
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userId", data.user_id);
+
           navigate("/Main");
         } else {
           alert("Invalid Credentials");
@@ -303,7 +305,16 @@ const Login = () => {
       body: JSON.stringify({ email: userEmail, new_password: newPassword }),
     })
       .then((res) => res.json())
-      .then((data) => alert(data.message))
+      .then((data) => {
+        alert(data.message);
+
+        if (data.message === "Password reset successfull") {
+          alert(
+            "Password reset successful! You can now log in with your new password."
+          );
+          setChangePassMode("Hidden");
+        }
+      })
       .catch((error) => console.error("Error:", error));
   };
 

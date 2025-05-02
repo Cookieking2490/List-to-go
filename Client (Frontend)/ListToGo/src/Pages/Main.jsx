@@ -9,84 +9,73 @@ import {
   faDroplet,
   faRightFromBracket,
   faXmark,
+  faPen,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import gsap from "gsap";
 
+const fallback = (newVal, oldVal) =>
+  newVal !== undefined && newVal !== null && newVal !== "" ? newVal : oldVal;
+
 const Main = () => {
   const navigate = useNavigate();
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      name: "Buy groceries",
-      status: "In Progress",
-      dueDate: "2025-04-15",
-      progress: 30,
-    },
-    {
-      id: 2,
-      name: "Project",
-      status: "Completed",
-      dueDate: "2025-04-10",
-      progress: 100,
-    },
-    {
-      id: 3,
-      name: "Gym session",
-      status: "Not started",
-      dueDate: "2025-04-20",
-      progress: 0,
-    },
-    {
-      id: 4,
-      name: "Read a book",
-      status: "In Progress",
-      dueDate: "2025-04-25",
-      progress: 50,
-    },
-    {
-      id: 5,
-      name: "Clean the house",
-      status: "Not started",
-      dueDate: "2025-04-30",
-      progress: 0,
-    },
-    {
-      id: 6,
-      name: "Finish homework",
-      status: "In Progress",
-      dueDate: "2025-04-18",
-      progress: 70,
-    },
-    {
-      id: 7,
-      name: "Plan a trip",
-      status: "Not started",
-      dueDate: "2025-05-01",
-      progress: 0,
-    },
-    {
-      id: 8,
-      name: "Attend workshop",
-      status: "Completed",
-      dueDate: "2025-04-12",
-      progress: 100,
-    },
-    {
-      id: 9,
-      name: "Cook dinner",
-      status: "In Progress",
-      dueDate: "2025-04-16",
-      progress: 40,
-    },
-    {
-      id: 10,
-      name: "Write a blog post",
-      status: "Not started",
-      dueDate: "2025-04-28",
-      progress: 0,
-    },
-  ]);
+  const [TaskView, setTaskView] = useState("Hidden");
+  const [SelectedTask, setSelectedTask] = useState(null);
+  const [ColorMode, setColorMode] = useState("Default");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [tasks, setTasks] = useState([]);
+  const [EditMode, setEditMode] = useState("Hidden");
   const [NewTaskPopup, setNewTaskPopup] = useState("Hidden");
+  const [TaskName, setTaskName] = useState("");
+  const [TaskStatus, setTaskStatus] = useState("");
+  const [TaskDueDate, setTaskDueDate] = useState("");
+  const [TaskCategory, setTaskCategory] = useState("");
+  const [TaskPriority, setTaskPriority] = useState("");
+  const [TaskProgress, setTaskProgress] = useState(0);
+  const [categoryFilter, setCategoryFilter] = useState("");
+
+
+  useEffect(() => {
+    if (ColorMode === "Dark") {
+      gsap.to(".MainPageBackground", {
+        backgroundColor: "#111111",
+        color: "#ffffff",
+      });
+      gsap.to([".DecorOneInside", ".DecorTwoInside", ".DecorThreeInside"], {
+        backgroundColor: "#111111",
+      });
+      gsap.to([".ToolsSection", ".TodoSection"], {
+        backgroundColor: "#222222",
+        color: "#ffffff",
+      });
+      gsap.to(
+        [
+          ".NewTaskSection",
+          ".NewTask",
+          ".CategoriesSection",
+          ".CategoryFilterBtn",
+          ".ColorChangeBtn",
+          ".LogoutBtn",
+          ".Aspect",
+          ".ProgressAspect",
+          ".CircularList",
+          ".CompleteTask",
+        ],
+        {
+          backgroundColor: "#111111",
+          color: "#ffffff",
+          outlineColor: "#ffffff",
+        }
+      );
+      gsap.to(".SearchInput", {
+        color: "#ffffff",
+        outlineColor: "#ffffff",
+      });
+      gsap.to(".TaskItem", {
+        borderBottom: "0.15vw solid #ffffff",
+      });
+    }
+  }, [ColorMode]);
 
   useEffect(() => {
     if (NewTaskPopup === "Hidden") {
@@ -100,18 +89,338 @@ const Main = () => {
         pointerEvents: "all",
       });
     }
-  });
+  }, [NewTaskPopup]);
+
+  useEffect(() => {
+    if (EditMode === "Hidden") {
+      gsap.to(".EditModeSection", {
+        opacity: 0,
+        pointerEvents: "none",
+      });
+    } else if (EditMode === "Show") {
+      gsap.to(".EditModeSection", {
+        opacity: 1,
+        pointerEvents: "all",
+      });
+    }
+  }, [EditMode]);
+
+  useEffect(() => {
+    if (TaskView === "Hidden") {
+      gsap.to(".TaskViewSection", {
+        opacity: 0,
+        pointerEvents: "none",
+      });
+    } else if (TaskView === "Show") {
+      gsap.to(".TaskViewSection", {
+        opacity: 1,
+        pointerEvents: "all",
+      });
+    }
+  }, [TaskView]);
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+
+    if (userId) {
+      fetch(`http://127.0.0.1:8000/task-list/${userId}/`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Fetched tasks for user:", data);
+          setTasks(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching tasks:", error);
+        });
+    } else {
+      console.error(
+        "User ID not found in localStorage. Redirecting to login..."
+      );
+      navigate("/");
+    }
+  }, []);
+
+  const handleDeleteTask = async () => {
+    if (!SelectedTask) {
+      console.error("No task selected for deletion.");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/todo/api/${SelectedTask.id}/delete/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        console.log("Task deleted successfully");
+
+        // Remove the task from state
+        setTasks((prevTasks) =>
+          prevTasks.filter((task) => task.id !== SelectedTask.id)
+        );
+
+        setSelectedTask(null);
+        setTaskView("Hidden");
+      } else {
+        const data = await response.json();
+        console.error("Error deleting task:", data);
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+
+  const HandleColorChange = () => {
+    if (ColorMode === "Default") {
+      setColorMode("Dark");
+    } else if (ColorMode === "Dark") {
+      setColorMode("Default");
+    }
+  };
 
   const NewTaskPopupOpacity = () => {
-    if (NewTaskPopup === "Show") {
-      setNewTaskPopup("Hidden");
-    } else if (NewTaskPopup === "Hidden") {
-      setNewTaskPopup("Show");
+    setNewTaskPopup((prev) => (prev === "Show" ? "Hidden" : "Show"));
+  };
+
+  const ToggleTaskViewMode = () => {
+    if (TaskView === "Hidden") {
+      setTaskView("Show");
     }
   };
 
   const HandleLogout = () => {
     navigate("/");
+  };
+
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+    setTaskView("Show");
+  };
+
+  const handleEditTask = async (e) => {
+    e.preventDefault();
+    if (!SelectedTask) {
+      console.error("No task selected for editing.");
+      return;
+    }
+
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+
+    if (!userId || !token) {
+      console.error("User ID or token not found in localStorage.");
+      return;
+    }
+
+    const updatedTaskData = {
+      task_name: fallback(TaskName, SelectedTask.task_name),
+      status: fallback(TaskStatus, SelectedTask.status),
+      due_time: fallback(TaskDueDate, SelectedTask.due_time),
+      category: fallback(TaskCategory, SelectedTask.category),
+      priority: fallback(TaskPriority, SelectedTask.priority),
+      progress: fallback(TaskProgress, SelectedTask.progress),
+    };
+
+    console.log("Sending updated task data:", updatedTaskData);
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/todo/api/${SelectedTask.id}/edit/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Token ${token}`,
+          },
+          body: JSON.stringify(updatedTaskData),
+        }
+      );
+
+      const result = await response.json();
+      if (response.ok) {
+        console.log(result.message);
+        const updatedTaskList = tasks.map((task) =>
+          task.id === SelectedTask.id ? { ...task, ...updatedTaskData } : task
+        );
+        setTasks(updatedTaskList);
+
+        fetchTasks(); // Refresh tasks after update
+        setEditMode("Hidden"); // Close edit mode
+      } else {
+        console.error(result.error);
+      }
+    } catch (error) {
+      console.error("Error editing task:", error);
+    }
+  };
+
+  const fetchTasks = async () => {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      try {
+        const response = await fetch(
+          `http://127.0.0.1:8000/task-list/${userId}/`
+        );
+        const data = await response.json();
+        console.log("Fetched tasks for user:", data);
+        setTasks(data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    } else {
+      console.error(
+        "User ID not found in localStorage. Redirecting to login..."
+      );
+      navigate("/");
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+
+    if (value.trim() === "") {
+      fetchTasks();
+    }
+  };
+
+  const handleCategoryFilterChange = async (e) => {
+    const selectedCategory = e.target.value;
+    setCategoryFilter(selectedCategory);
+  
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+  
+    if (!userId || !token) {
+      console.error("User ID or token missing");
+      return;
+    }
+  
+    if (!selectedCategory) {
+      fetchTasks(); // if category is empty, load all tasks
+      return;
+    }
+  
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/filter-task/?user_id=${userId}&category=${selectedCategory}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to filter tasks");
+      }
+  
+      const data = await response.json();
+      setTasks(data);
+    } catch (error) {
+      console.error("Error filtering tasks:", error);
+    }
+  };
+  
+
+  const handleSearchTask = async () => {
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+
+    if (!userId || !token) {
+        console.error("Missing user ID or token.");
+        return;
+    }
+
+    if (!searchQuery.trim()) {
+        fetchTasks();  
+        return;
+    }
+
+    try {
+        
+        const response = await fetch(
+            `http://127.0.0.1:8000/tasks/search/?task_name=${searchQuery}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${token}`,
+                },
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Search failed");
+        }
+
+        const data = await response.json();
+        setTasks(data.tasks);  // Assuming 'tasks' is the key in your response JSON
+    } catch (error) {
+        console.error("Error searching tasks:", error);
+    }
+};
+
+
+  const createTask = async (taskData, token) => {
+    const response = await fetch("http://127.0.0.1:8000/create-task/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(taskData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create task");
+    }
+
+    return await response.json();
+  };
+
+  const handleCreateTask = async () => {
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+
+    if (!userId) {
+      console.error("User ID not found in localStorage.");
+      return;
+    }
+
+    const taskData = {
+      task_name: TaskName,
+      status: TaskStatus,
+      due_time: TaskDueDate,
+      category: TaskCategory,
+      priority: TaskPriority,
+      progress: TaskProgress,
+      user_id: userId,
+    };
+
+    try {
+      const newTask = await createTask(taskData, token);
+      setTasks((prevTasks) => [...prevTasks, newTask]);
+      setNewTaskPopup("Hidden");
+
+      setTaskName("");
+      setTaskStatus("");
+      setTaskDueDate("");
+      setTaskCategory("");
+      setTaskPriority("");
+      setTaskProgress(0);
+
+      fetchTasks();
+    } catch (error) {
+      console.error("Error creating task:", error);
+    }
   };
 
   return (
@@ -124,14 +433,28 @@ const Main = () => {
           <FontAwesomeIcon icon={faPlus} className="PlusIcon" />
         </div>
         <div className="CategoriesSection">
-          <button className="CategoryFilterBtn">Category</button>
-          <FontAwesomeIcon icon={faFilter} className="FilterIcon" />
+          <select className="CategoryFilter" value={categoryFilter} onChange={handleCategoryFilterChange} defaultValue="">
+            <option value="">Category</option>
+            <option>Work</option>
+            <option>Personal</option>
+            <option>Health</option>
+            <option>Finance</option>
+            <option>Social</option>
+            <option>Fitness</option>
+            <option>Travel</option>
+            <option>Errands</option>
+            <option>Entertainment</option>
+            <option>Events</option>
+            <option>Other</option>
+          </select>
         </div>
         <div className="SearchSection">
-          <input type="text" className="SearchInput" placeholder="Search" />
-          <FontAwesomeIcon icon={faMagnifyingGlass} className="SearchIcon" />
+          <input type="text" className="SearchInput" placeholder="Search" value={searchQuery} onChange={handleSearchChange} />
+          <button className="SearchIconBtn" onClick={handleSearchTask}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} className="SearchIcon" />
+          </button>
         </div>
-        <button className="ColorChangeBtn">
+        <button className="ColorChangeBtn" onClick={HandleColorChange}>
           <FontAwesomeIcon icon={faDroplet} className="ColorIcon" />
         </button>
         <button className="LogoutBtn" onClick={HandleLogout}>
@@ -151,10 +474,15 @@ const Main = () => {
           {tasks.map((task) => (
             <div key={task.id} className="TaskItem">
               <button className="CompleteTask"></button>
-              <div className="CircularList">
-                <div className="TaskName">{task.name}</div>
+              <div
+                className="CircularList"
+                onClick={() => handleTaskClick(task)}
+              >
+                <div className="TaskName">{task.task_name}</div>
                 <div className="TaskStatus">{task.status}</div>
-                <div className="TaskDueDate">{task.dueDate}</div>
+                <div className="TaskDueDate">
+                  {new Date(task.due_time).toLocaleDateString()}
+                </div>{" "}
                 <input
                   type="range"
                   className="TaskProgress"
@@ -189,53 +517,161 @@ const Main = () => {
         </div>
       </div>
       <div className="DecorSectionThree"></div>
+
       <div className="NewTaskPopup">
         <button className="ClosePopupBtn" onClick={NewTaskPopupOpacity}>
           <FontAwesomeIcon icon={faXmark} className="ClosePopupIcon" />
         </button>
         <h1 className="TaskNamePopup">Task Name</h1>
-        <input type="text" className="TaskNameInput" />
+        <input
+          type="text"
+          className="TaskNameInput"
+          onChange={(e) => setTaskName(e.target.value)}
+        />
         <h1 className="TaskStatusPopup">Task Status</h1>
-        <select className="TaskStatusSelect">
-          <option value="">On hold</option>
-          <option value="">Not started</option>
-          <option value="">In Progress</option>
-          <option value="">Completed</option>
+        <select
+          className="TaskStatusSelect"
+          onChange={(e) => setTaskStatus(e.target.value)}
+        >
+          <option>On hold</option>
+          <option>Not started</option>
+          <option>In Progress</option>
+          <option>Completed</option>
         </select>
         <h1 className="TaskDueDatePopup">Due date</h1>
-        <input type="date" className="TaskDueDateInput" />
+        <input
+          type="date"
+          className="TaskDueDateInput"
+          onChange={(e) => setTaskDueDate(e.target.value)}
+        />
         <h1 className="CategoryPopup">Category</h1>
-        <select className="CategorySelect">
-          <option value="">Work</option>
-          <option value="">Personal</option>
-          <option value="">Educational</option>
-          <option value="">Health</option>
-          <option value="">Finance</option>
-          <option value="">Social</option>
-          <option value="">Hobbies</option>
-          <option value="">Fitness</option>
-          <option value="">Travel</option>
-          <option value="">Family</option>
-          <option value="">Shopping</option>
-          <option value="">Errands</option>
-          <option value="">Spiritual</option>
-          <option value="">Entertainment</option>
-          <option value="">Creative</option>
-          <option value="">Volunteer</option>
-          <option value="">Career Development</option>
-          <option value="">Events</option>
-          <option value="">Miscellaneous</option>
-          <option value="">other</option>
+        <select
+          className="CategorySelect"
+          onChange={(e) => setTaskCategory(e.target.value)}
+        >
+          <option>Work</option>
+          <option>Personal</option>
+          <option>Health</option>
+          <option>Finance</option>
+          <option>Social</option>
+          <option>Fitness</option>
+          <option>Travel</option>
+          <option>Errands</option>
+          <option>Entertainment</option>
+          <option>Events</option>
+          <option>Other</option>
         </select>
         <h1 className="PriorityPopup">Priority</h1>
-        <select className="PrioritySelect">
-          <option value="">High</option>
-          <option value="">Medium</option>
-          <option value="">Low</option>
+        <select
+          className="PrioritySelect"
+          onChange={(e) => setTaskPriority(e.target.value)}
+        >
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
         </select>
         <h1 className="ProgressPopup">Progress</h1>
-        <input type="number" className="ProgressInput" />
-        <button className="CreateTaskBtn">Create Task</button>
+        <input
+          type="number"
+          className="ProgressInput"
+          onChange={(e) => setTaskProgress(e.target.value)}
+          min={0}
+          max={100}
+        />
+        <button className="CreateTaskBtn" onClick={handleCreateTask}>
+          Create Task
+        </button>
+      </div>
+
+      {SelectedTask && (
+        <div className="TaskViewSection">
+          <button className="EditViewBtn" onClick={() => setEditMode("Show")}>
+            <FontAwesomeIcon icon={faPen} className="EditViewIcon" />
+          </button>
+          <button className="DeleteViewBtn" onClick={handleDeleteTask}>
+            <FontAwesomeIcon icon={faTrashCan} className="DeleteEditIcon" />
+          </button>
+          <button
+            className="CloseViewBtn"
+            onClick={() => setTaskView("Hidden")}
+          >
+            <FontAwesomeIcon icon={faXmark} className="CloseViewIcon" />
+          </button>
+          <h1 className="TaskNameView">Task Name: {SelectedTask.task_name}</h1>
+          <p className="TaskPriorityView">
+            Task Priority: {SelectedTask.priority}
+          </p>
+          <p className="TaskStatusView">Task Status: {SelectedTask.status}</p>
+          <p className="TaskDueDateView">Due Date: {SelectedTask.due_time}</p>
+          <p className="TaskCategoryView">Category: {SelectedTask.category}</p>
+          <p className="TaskProgressView">
+            Task Progress: {SelectedTask.progress}
+          </p>
+        </div>
+      )}
+      <div className="EditModeSection">
+        <button className="CloseEditBtn" onClick={() => setEditMode("Hidden")}>
+          <FontAwesomeIcon icon={faXmark} className="CloseEditIcon" />
+        </button>
+        <h1 className="TaskNameEdit">Task Name</h1>
+        <input
+          type="text"
+          className="TaskNameInput"
+          onChange={(e) => setTaskName(e.target.value)}
+        />
+        <h1 className="TaskStatusEdit">Task Status</h1>
+        <select
+          className="TaskStatusSelect"
+          onChange={(e) => setTaskStatus(e.target.value)}
+        >
+          <option>On hold</option>
+          <option>Not started</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+        </select>
+        <h1 className="TaskDueDateEdit">Due date</h1>
+        <input
+          type="date"
+          className="TaskDueDateInput"
+          onChange={(e) => setTaskDueDate(e.target.value)}
+        />
+        <h1 className="CategoryEdit">Category</h1>
+        <select
+          className="CategorySelect"
+          onChange={(e) => setTaskCategory(e.target.value)}
+        >
+          <option>Work</option>
+          <option>Personal</option>
+          <option>Health</option>
+          <option>Finance</option>
+          <option>Social</option>
+          <option>Fitness</option>
+          <option>Travel</option>
+          <option>Errands</option>
+          <option>Entertainment</option>
+          <option>Events</option>
+          <option>Other</option>
+        </select>
+        <h1 className="PriorityEdit">Priority</h1>
+        <select
+          className="PrioritySelectEdit"
+          onChange={(e) => setTaskPriority(e.target.value)}
+        >
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+        <h1 className="ProgressEdit">Progress</h1>
+        <input
+          type="number"
+          className="ProgressInputEdit"
+          onChange={(e) => setTaskProgress(e.target.value)}
+          min={0}
+          max={100}
+        />
+        <button className="UpdateTaskBtn" onClick={handleEditTask}>
+          Update Task
+        </button>
       </div>
     </div>
   );

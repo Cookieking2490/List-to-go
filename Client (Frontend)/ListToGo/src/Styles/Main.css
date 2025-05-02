@@ -209,10 +209,11 @@ body {
 .SearchIcon {
   position: relative;
   display: flex;
-  width: 2.5vw;
-  height: 2.5vh;
+  width: 2vw;
+  height: 2vh;
   right: 12%;
   rotate: 90deg;
+  align-items: center;
 }
 
 .SearchInput::placeholder {
@@ -570,4 +571,302 @@ body {
   width: 3.5vw;
   height: 3.5vh;
   right: 5%;
+}
+
+.TaskViewSection {
+  width: 40vw;
+  height: 30vh;
+  background-color: #949adc;
+  outline: 0.15vw solid #000000;
+  border-radius: 0.5vw;
+  position: absolute;
+  top: 45%;
+  left: 30%;
+  display: flex;
+  flex-direction: column;
+}
+
+.CloseViewBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 2.5vw;
+  height: 2.5vw;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 5%;
+  right: 5%;
+}
+
+.TaskNameView {
+  position: absolute;
+  font-family: "Montserrat", sans-serif;
+  font-size: 2vw;
+  font-weight: 500;
+  top: 0%;
+  left: 5%;
+}
+
+.TaskPriorityView {
+  background-color: white;
+  position: absolute;
+  font-family: "latto", sans-serif;
+  font-size: 1.2vw;
+  top: 25%;
+  left: 10%;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+}
+
+.TaskStatusView {
+  background-color: white;
+
+  position: absolute;
+  font-family: "latto", sans-serif;
+  font-size: 1.2vw;
+  bottom: 0;
+  left: 10%;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+}
+
+.TaskDueDateView {
+  background-color: white;
+  position: absolute;
+  font-family: "latto", sans-serif;
+  font-size: 1.2vw;
+  top: 25%;
+  left: 60%;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+}
+
+.TaskProgressView {
+  background-color: white;
+  position: absolute;
+  font-family: "latto", sans-serif;
+  font-size: 1.2vw;
+  bottom: 0;
+  left: 60%;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+}
+
+.TaskCategoryView {
+  background-color: white;
+  position: absolute;
+  font-family: "latto", sans-serif;
+  font-size: 1.2vw;
+  top: 45%;
+  left: 38%;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+}
+
+.EditViewBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 2.5vw;
+  height: 2.5vw;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 5%;
+  right: 13%;
+}
+
+.DeleteViewBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 2.5vw;
+  height: 2.5vw;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 5%;
+  right: 21%;
+}
+
+.EditModeSection {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 45vw;
+  height: 50vh;
+  border-radius: 0.5vw;
+  top: 25%;
+  outline: 0.15vw solid #000000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.TaskNameEdit {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.TaskStatusEdit {
+  position: absolute;
+  top: 25%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.TaskStatusSelect {
+  position: absolute;
+  top: 30%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.TaskDueDateEdit {
+  position: absolute;
+  top: 40%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.CategoryEdit {
+  position: absolute;
+  top: 55%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.PriorityEdit {
+  position: absolute;
+  top: 70%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.PrioritySelectEdit {
+  position: absolute;
+  top: 75%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.ProgressEdit {
+  position: absolute;
+  top: 85%;
+  left: 5%;
+  font-family: "latto", sans-serif;
+  font-size: 1.5vw;
+  color: black;
+}
+
+.ProgressInputEdit {
+  position: absolute;
+  top: 90%;
+  left: 25%;
+  width: 15vw;
+  height: 3vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.UpdateTaskBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 10vw;
+  height: 4vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 89%;
+  left: 65%;
+}
+
+.UpdateTaskBtn:hover {
+  background-color: #ffffff6b;
+  transition: background-color 0.3s ease;
+}
+
+.CloseEditBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 2.5vw;
+  height: 2.5vw;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+  top: 5%;
+  right: 5%;
+}
+
+.CategoryFilter {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc;
+  width: 10vw;
+  height: 4vh;
+  border-radius: 0.25vw;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #000000;
+  border: none;
+}
+
+.SearchIconBtn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #949adc00;
+  width: 1.7vw;
+  height: 1.7vw;
+  border-radius: 50vh;
+  font-size: 1.2vw;
+  outline: 0.15vw solid #00000000;
+  right: 5%;
+  border: none;
+  cursor: pointer;
 }
