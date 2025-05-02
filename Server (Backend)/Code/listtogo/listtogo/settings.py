@@ -68,7 +68,8 @@ INSTALLED_APPS = [
     'registration',
     'forgetpassword',
     'fetchtasks',
-    'todo'
+    'todo',
+    'filter'
 ]
 
 MIDDLEWARE = [

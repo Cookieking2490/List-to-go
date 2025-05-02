@@ -32,6 +32,8 @@ const Main = () => {
   const [TaskCategory, setTaskCategory] = useState("");
   const [TaskPriority, setTaskPriority] = useState("");
   const [TaskProgress, setTaskProgress] = useState(0);
+  const [categoryFilter, setCategoryFilter] = useState("");
+
 
   useEffect(() => {
     if (ColorMode === "Dark") {
@@ -290,6 +292,44 @@ const Main = () => {
     }
   };
 
+  const handleCategoryFilterChange = async (e) => {
+    const selectedCategory = e.target.value;
+    setCategoryFilter(selectedCategory);
+  
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+  
+    if (!userId || !token) {
+      console.error("User ID or token missing");
+      return;
+    }
+  
+    if (!selectedCategory) {
+      fetchTasks(); // if category is empty, load all tasks
+      return;
+    }
+  
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/filter-task/?user_id=${userId}&category=${selectedCategory}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to filter tasks");
+      }
+  
+      const data = await response.json();
+      setTasks(data);
+    } catch (error) {
+      console.error("Error filtering tasks:", error);
+    }
+  };
+  
+
   const handleSearchTask = async () => {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
@@ -300,12 +340,12 @@ const Main = () => {
     }
 
     if (!searchQuery.trim()) {
-        fetchTasks();  // Assuming fetchTasks fetches all tasks when search is empty.
+        fetchTasks();  
         return;
     }
 
     try {
-        // Pass the task_name query parameter
+        
         const response = await fetch(
             `http://127.0.0.1:8000/tasks/search/?task_name=${searchQuery}`,
             {
@@ -393,7 +433,7 @@ const Main = () => {
           <FontAwesomeIcon icon={faPlus} className="PlusIcon" />
         </div>
         <div className="CategoriesSection">
-          <select className="CategoryFilter" defaultValue="">
+          <select className="CategoryFilter" value={categoryFilter} onChange={handleCategoryFilterChange} defaultValue="">
             <option value="">Category</option>
             <option>Work</option>
             <option>Personal</option>
