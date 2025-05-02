@@ -90,14 +90,35 @@ def edit_task(request, task_id):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+
 @csrf_exempt
 @require_http_methods(["DELETE"])
 def delete_task(request, task_id):
+    # Extract token from Authorization header
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Token "):
+        return JsonResponse({"error": "Unauthorized: Missing or invalid token"}, status=401)
+
+    token = auth_header.split(" ")[1]
+
+    # Retrieve the user associated with the token from the cache
+    user_id = cache.get(token)
+    if not user_id:
+        return JsonResponse({"error": "Unauthorized: Token expired or invalid"}, status=401)
+
     try:
-        task = Task.objects.get(id=task_id, user=request.user)
+        # Get the user object
+        user = CustomUser.objects.get(id=user_id)
+
+        # Try to find and delete the task belonging to the user
+        task = Task.objects.get(id=task_id, user=user)
         task.delete()
-        return JsonResponse({'message': 'Task deleted successfully.'})
+
+        return JsonResponse({'message': 'Task deleted successfully.'}, status=200)
+
     except Task.DoesNotExist:
         return JsonResponse({'error': 'Task not found.'}, status=404)
+    except CustomUser.DoesNotExist:
+        return JsonResponse({'error': 'User not found.'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)

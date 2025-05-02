@@ -137,6 +137,46 @@ const Main = () => {
     }
   }, []);
 
+
+  const handleDeleteTask = async () => {
+    if (!SelectedTask) {
+      console.error("No task selected for deletion.");
+      return;
+    }
+  
+    const token = localStorage.getItem("token");
+  
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/todo/api/${SelectedTask.id}/delete/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+  
+      if (response.ok) {
+        console.log("Task deleted successfully");
+  
+        // Remove the task from state
+        setTasks((prevTasks) =>
+          prevTasks.filter((task) => task.id !== SelectedTask.id)
+        );
+  
+        setSelectedTask(null);
+        setTaskView("Hidden");
+      } else {
+        const data = await response.json();
+        console.error("Error deleting task:", data);
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+  
+
   const HandleColorChange = () => {
     if (ColorMode === "Default") {
       setColorMode("Dark");
@@ -459,8 +499,8 @@ const Main = () => {
           <button className="EditViewBtn" onClick={() => setEditMode("Show")}>
             <FontAwesomeIcon icon={faPen} className="EditViewIcon" />
           </button>
-          <button className="DeleteViewBtn">
-            <FontAwesomeIcon icon={faTrashCan} className="DeleteEditIcon" />
+          <button className="DeleteViewBtn"  onClick={handleDeleteTask}>
+            <FontAwesomeIcon icon={faTrashCan} className="DeleteEditIcon"/>
           </button>
           <button
             className="CloseViewBtn"
