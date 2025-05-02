@@ -138,15 +138,14 @@ const Main = () => {
     }
   }, []);
 
-
   const handleDeleteTask = async () => {
     if (!SelectedTask) {
       console.error("No task selected for deletion.");
       return;
     }
-  
+
     const token = localStorage.getItem("token");
-  
+
     try {
       const response = await fetch(
         `http://127.0.0.1:8000/todo/api/${SelectedTask.id}/delete/`,
@@ -157,15 +156,15 @@ const Main = () => {
           },
         }
       );
-  
+
       if (response.ok) {
         console.log("Task deleted successfully");
-  
+
         // Remove the task from state
         setTasks((prevTasks) =>
           prevTasks.filter((task) => task.id !== SelectedTask.id)
         );
-  
+
         setSelectedTask(null);
         setTaskView("Hidden");
       } else {
@@ -176,7 +175,6 @@ const Main = () => {
       console.error("Error deleting task:", error);
     }
   };
-  
 
   const HandleColorChange = () => {
     if (ColorMode === "Default") {
@@ -286,27 +284,26 @@ const Main = () => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
-  
+
     if (value.trim() === "") {
       fetchTasks();
     }
   };
-  
 
   const handleSearchTask = async () => {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
-  
+
     if (!userId || !token) {
       console.error("Missing user ID or token.");
       return;
     }
-  
+
     if (!searchQuery.trim()) {
       fetchTasks();
       return;
     }
-  
+
     try {
       const response = await axios.get("http://localhost:8000/tasks/search/", {
         params: {
@@ -317,17 +314,15 @@ const Main = () => {
           Authorization: `Token ${token}`,
         },
       });
-  
+
       setTasks(response.data.tasks);
     } catch (error) {
       console.error("Error searching tasks:", error);
     }
   };
-  
-  
 
   const createTask = async (taskData, token) => {
-    const response = await fetch("http://127.0.0.1:8000/todo/create-task/", {
+    const response = await fetch("http://127.0.0.1:8000/create-task/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -407,7 +402,9 @@ const Main = () => {
         </div>
         <div className="SearchSection">
           <input type="text" className="SearchInput" placeholder="Search" />
-          <FontAwesomeIcon icon={faMagnifyingGlass} className="SearchIcon" />
+          <button className="SearchIconBtn" onClick={handleSearchTask}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} className="SearchIcon" />
+          </button>
         </div>
         <button className="ColorChangeBtn" onClick={HandleColorChange}>
           <FontAwesomeIcon icon={faDroplet} className="ColorIcon" />
@@ -543,8 +540,8 @@ const Main = () => {
           <button className="EditViewBtn" onClick={() => setEditMode("Show")}>
             <FontAwesomeIcon icon={faPen} className="EditViewIcon" />
           </button>
-          <button className="DeleteViewBtn"  onClick={handleDeleteTask}>
-            <FontAwesomeIcon icon={faTrashCan} className="DeleteEditIcon"/>
+          <button className="DeleteViewBtn" onClick={handleDeleteTask}>
+            <FontAwesomeIcon icon={faTrashCan} className="DeleteEditIcon" />
           </button>
           <button
             className="CloseViewBtn"
@@ -569,18 +566,32 @@ const Main = () => {
           <FontAwesomeIcon icon={faXmark} className="CloseEditIcon" />
         </button>
         <h1 className="TaskNameEdit">Task Name</h1>
-        <input type="text" className="TaskNameInput" onChange={(e) => setTaskName(e.target.value)}/>
+        <input
+          type="text"
+          className="TaskNameInput"
+          onChange={(e) => setTaskName(e.target.value)}
+        />
         <h1 className="TaskStatusEdit">Task Status</h1>
-        <select className="TaskStatusSelect" onChange={(e) => setTaskStatus(e.target.value)}>
+        <select
+          className="TaskStatusSelect"
+          onChange={(e) => setTaskStatus(e.target.value)}
+        >
           <option>On hold</option>
           <option>Not started</option>
           <option>In Progress</option>
           <option>Completed</option>
         </select>
         <h1 className="TaskDueDateEdit">Due date</h1>
-        <input type="date" className="TaskDueDateInput" onChange={(e) => setTaskDueDate(e.target.value)} />
+        <input
+          type="date"
+          className="TaskDueDateInput"
+          onChange={(e) => setTaskDueDate(e.target.value)}
+        />
         <h1 className="CategoryEdit">Category</h1>
-        <select className="CategorySelect" onChange={(e) => setTaskCategory(e.target.value)}>
+        <select
+          className="CategorySelect"
+          onChange={(e) => setTaskCategory(e.target.value)}
+        >
           <option>Work</option>
           <option>Personal</option>
           <option>Health</option>
@@ -594,13 +605,22 @@ const Main = () => {
           <option>Other</option>
         </select>
         <h1 className="PriorityEdit">Priority</h1>
-        <select className="PrioritySelectEdit" onChange={(e) => setTaskPriority(e.target.value)}>
+        <select
+          className="PrioritySelectEdit"
+          onChange={(e) => setTaskPriority(e.target.value)}
+        >
           <option>High</option>
           <option>Medium</option>
           <option>Low</option>
         </select>
         <h1 className="ProgressEdit">Progress</h1>
-        <input type="number" className="ProgressInputEdit" onChange={(e) => setTaskProgress(e.target.value)} min={0} max={100}  />
+        <input
+          type="number"
+          className="ProgressInputEdit"
+          onChange={(e) => setTaskProgress(e.target.value)}
+          min={0}
+          max={100}
+        />
         <button className="UpdateTaskBtn" onClick={handleEditTask}>
           Update Task
         </button>
