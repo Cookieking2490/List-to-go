@@ -15,10 +15,9 @@ def login_view(request):
         try:
             user = CustomUser.objects.get(username=username)  
             if user.password == password: 
-                # ✅ Generate a simple random token
                 token = secrets.token_hex(16)
 
-                # ✅ Optional: store token → user mapping (expires in 1 hour)
+                
                 cache.set(token, user.id, timeout=3600)
                 return JsonResponse({
                     "status": "Success",
